@@ -1,12 +1,12 @@
-#AppDynamics Official Docker Images
+# AppDynamics Official Docker Images
 
 Official AppDynamics docker images for our APM and Server Agents.  These images are available from the Docker Store and can be downloaded using `docker pull`; see below for the image names and tags that can be downloaded.  We currently provide images that have the Java Agent pre-installed, using certified base images for OpenJDK, Tomcat and Jetty. Additional images that include APM Agents for other language runtimes will be available shortly.  We also provide an official image for our Server Agent, pre-configured to run our Integrated Docker Visibility monitoring. Please see the [documentation](https://docs.appdynamics.com/) for more information about AppDynamics [Java APM](https://docs.appdynamics.com/display/PRO43/Application+Monitoring) and [Server Visibility](https://docs.appdynamics.com/display/PRO43/Server+Visibility) monitoring.
 
 To use the images, you need either an on-premise installation of AppDynamics or an AppDynamics SaaS account: please visit [AppDynamics.com](https://www.appdynamics.com/) for details.
 
-##Java APM Agent
+## Java APM Agent
 
-###How to build the Java APM Agent Images
+### How to build the Java APM Agent Images
 
 To build the Java Agent images, you will need to supply:
 
@@ -52,7 +52,7 @@ This will build the following images:
 * `appdynamics/java:<VERSION>_jre8-alpine`
 * `appdynamics/java:<VERSION>_jre7-slim`
 
-###How to run the Java APM Agent Images
+### How to run the Java APM Agent Images
 
 ***Tomcat and Jetty-based images***
 
@@ -68,9 +68,9 @@ For both the Tomcat and Jetty-based images, the app server will start automatica
 
 These images are provided for you to customize your own container builds.  They use OpenJDK base images (JRE and JDK variants are provided), with the AppDynamics Java Agent pre-installed in the /opt/appdynamics folder. Please see the [OpenJDK](https://store.docker.com/images/openjdk) documentation on the Docker Store for details of the base image. With these images, it is up to you how to configure the AppDyanmics Agent: you can use the AppDynamics node environment variables as described in the product [documentation](https://docs.appdynamics.com/display/PRO43/Use+Environment+Variables+for+Java+Agent+Settings).  See above for information on how to pass environment variables to the container at runtime.
 
-##Server Agent
+## Server Agent
 
-###How to build the Server Agent Image
+### How to build the Server Agent Image
 
 To build the Server Agent image, you will need to supply:
 
@@ -90,7 +90,7 @@ This will build the following images:
 
 * `appdynamics/machine:<VERSION>`
 
-###How to run the Server Agent Image
+### How to run the Server Agent Image
 
 The agent is initialized using machine agent environment variables as described in the product [documentation](https://docs.appdynamics.com/display/PRO43/Standalone+Machine+Agent+Configuration+Property+Reference).  These can be passed to the container at run-time using environment variables (`-e` or `--env`) or env-file (`--env-file`): note that you do not need to pass either a node or tier name to run the Server Agent with Integrated Docker Visibility.
 
