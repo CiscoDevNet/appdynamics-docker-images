@@ -1,0 +1,11 @@
+version: '3'
+
+services:
+  machine:
+    image: appdynamics/machine:${APPD_AGENT_VERSION}
+    build:
+      context: .
+      args:
+        APPD_AGENT_VERSION: 
+        APPD_AGENT_SHA256: 
+

@@ -1,0 +1,174 @@
+version: '3'
+
+services:
+  jre8-alpine:
+    image: appdynamics/java:${APPD_AGENT_VERSION}_jre8-alpine
+    build:
+      context: .
+      dockerfile: ./openjdk/8/jre/alpine/Dockerfile
+      args:
+        APPD_AGENT_VERSION: 
+        APPD_AGENT_SHA256: 
+
+  jre8-slim:
+    image: appdynamics/java:${APPD_AGENT_VERSION}_jre8-slim
+    build:
+      context: .
+      dockerfile: ./openjdk/8/jre/slim/Dockerfile
+      args:
+        APPD_AGENT_VERSION:
+        APPD_AGENT_SHA256:
+
+  jdk8-alpine:
+    image: appdynamics/java:${APPD_AGENT_VERSION}_jdk8-alpine
+    build:
+      context: .
+      dockerfile: ./openjdk/8/jdk/alpine/Dockerfile
+      args:
+        APPD_AGENT_VERSION:
+        APPD_AGENT_SHA256:
+
+  jdk8-slim:
+    image: appdynamics/java:${APPD_AGENT_VERSION}_jdk8-slim
+    build:
+      context: .
+      dockerfile: ./openjdk/8/jdk/slim/Dockerfile
+      args:
+        APPD_AGENT_VERSION:
+        APPD_AGENT_SHA256:
+
+  jre7-alpine:
+    image: appdynamics/java:${APPD_AGENT_VERSION}_jre7-alpine
+    build:
+      context: .
+      dockerfile: ./openjdk/7/jre/alpine/Dockerfile
+      args:
+        APPD_AGENT_VERSION:
+        APPD_AGENT_SHA256:
+
+  jre7-slim:
+    image: appdynamics/java:${APPD_AGENT_VERSION}_jre7-slim
+    build:
+      context: .
+      dockerfile: ./openjdk/7/jre/slim/Dockerfile
+      args:
+        APPD_AGENT_VERSION:
+        APPD_AGENT_SHA256:
+
+  jdk7-alpine:
+    image: appdynamics/java:${APPD_AGENT_VERSION}_jdk7-alpine
+    build:
+      context: .
+      dockerfile: ./openjdk/7/jdk/alpine/Dockerfile
+      args:
+        APPD_AGENT_VERSION:
+        APPD_AGENT_SHA256:
+
+  jdk7-slim:
+    image: appdynamics/java:${APPD_AGENT_VERSION}_jdk7-slim
+    build:
+      context: .
+      dockerfile: ./openjdk/7/jdk/slim/Dockerfile
+      args:
+        APPD_AGENT_VERSION:
+        APPD_AGENT_SHA256:
+
+  jre9-slim:
+    image: appdynamics/java:${APPD_AGENT_VERSION}_jre9-slim
+    build:
+      context: .
+      dockerfile: ./openjdk/9/jre/slim/Dockerfile
+      args:
+        APPD_AGENT_VERSION:
+        APPD_AGENT_SHA256:
+
+  tomcat7-jre7-alpine:
+    image: appdynamics/java:${APPD_AGENT_VERSION}_tomcat7-jre7-alpine
+    build:
+      context: .
+      dockerfile: ./tomcat/7/jre7-alpine/Dockerfile
+      args:
+        APPD_AGENT_VERSION:
+        APPD_AGENT_SHA256:
+
+  tomcat7-jre8:
+    image: appdynamics/java:${APPD_AGENT_VERSION}_tomcat7-jre8
+    build:
+      context: .
+      dockerfile: ./tomcat/7/jre8/Dockerfile
+      args:
+        APPD_AGENT_VERSION:
+        APPD_AGENT_SHA256:
+
+  tomcat7-jre8-alpine:
+    image: appdynamics/java:${APPD_AGENT_VERSION}_tomcat7-jre8-alpine
+    build:
+      context: .
+      dockerfile: ./tomcat/7/jre8-alpine/Dockerfile
+      args:
+        APPD_AGENT_VERSION:
+        APPD_AGENT_SHA256:
+
+  tomcat8-jre7-alpine:
+    image: appdynamics/java:${APPD_AGENT_VERSION}_tomcat8-jre7-alpine
+    build:
+      context: .
+      dockerfile: ./tomcat/8/jre7-alpine/Dockerfile
+      args:
+        APPD_AGENT_VERSION:
+        APPD_AGENT_SHA256:
+
+  tomcat8-jre8:
+    image: appdynamics/java:${APPD_AGENT_VERSION}_tomcat8-jre8
+    build:
+      context: .
+      dockerfile: ./tomcat/8/jre8/Dockerfile
+      args:
+        APPD_AGENT_VERSION:
+        APPD_AGENT_SHA256:
+
+  tomcat8-jre8-alpine:
+    image: appdynamics/java:${APPD_AGENT_VERSION}_tomcat8-jre8-alpine
+    build:
+      context: .
+      dockerfile: ./tomcat/8/jre8-alpine/Dockerfile
+      args:
+        APPD_AGENT_VERSION:
+        APPD_AGENT_SHA256:
+
+  tomcat9-jre8:
+    image: appdynamics/java:${APPD_AGENT_VERSION}_tomcat9-jre8
+    build:
+      context: .
+      dockerfile: ./tomcat/9/jre8/Dockerfile
+      args:
+        APPD_AGENT_VERSION:
+        APPD_AGENT_SHA256:
+
+  tomcat9-jre8-alpine:
+    image: appdynamics/java:${APPD_AGENT_VERSION}_tomcat9-jre8-alpine
+    build:
+      context: .
+      dockerfile: ./tomcat/9/jre8-alpine/Dockerfile
+      args:
+        APPD_AGENT_VERSION:
+        APPD_AGENT_SHA256:
+
+  jetty9-jre8:
+    image: appdynamics/java:${APPD_AGENT_VERSION}_jetty9-jre8
+    build:
+      context: .
+      dockerfile: ./jetty/9/jre8/Dockerfile
+      args:
+        APPD_AGENT_VERSION:
+        APPD_AGENT_SHA256:
+
+  jetty9-jre8-alpine:
+    image: appdynamics/java:${APPD_AGENT_VERSION}_jetty9-jre8-alpine
+    build:
+      context: .
+      dockerfile: ./jetty/9/jre8-alpine/Dockerfile
+      args:
+        APPD_AGENT_VERSION:
+        APPD_AGENT_SHA256:
+
