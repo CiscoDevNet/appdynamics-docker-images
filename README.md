@@ -94,15 +94,23 @@ This will build the following images:
 
 The agent is initialized using machine agent environment variables as described in the product [documentation](https://docs.appdynamics.com/display/PRO43/Standalone+Machine+Agent+Configuration+Property+Reference).  These can be passed to the container at run-time using environment variables (`-e` or `--env`) or env-file (`--env-file`): note that you do not need to pass either a node or tier name to run the Server Agent with Integrated Docker Visibility.
 
-To enable Integrated Docker Visibility, you must run the container with two volume mounts that provide access to the host file system (read-only) and the UNIX domain socket for the Docker Engine API:
+To enable Integrated Docker Visibility, you must run the container with two volume mounts that provide access to the host file system (read-only) and the UNIX domain socket for the Docker Engine API.  In addition, the following property must be set:
+
+`MACHINE_AGENT_PROPERTIES=-Dappdynamics.sim.enabled=true -Dappdynamics.docker.enabled=true`
+
+The example env-file (`appdynamics.env`) included in the *appd-machine* folder gives the environment variables that must be set in order for the agent to connect to the AppDynamics Controller.  
+
+The following example shows how to run the Server Agent container using environment variables:
 
 ```
-docker run --rm -it \
+docker run -d \
 -e APPD_HOST=<controller-host-name> \
 -e APPD_PORT=<controller-port> \
 -e APPD_SSL_ENABLED=<true-or-false> \
 -e APPD_ACCOUNT_NAME=<account-name> \
 -e APPD_ACCESS_KEY=<account-access-key> \
--v /:/hostroot:ro -v /var/run/docker.sock:/var/run/docker.sock appdynamics/machine:<VERSION>
+-e MACHINE_AGENT_PROPERTIES=-Dappdynamics.sim.enabled=true -Dappdynamics.docker.enabled=true \
+-v /:/hostroot:ro -v /var/run/docker.sock:/var/run/docker.sock \
+appdynamics/machine:<VERSION>
 ```
 
