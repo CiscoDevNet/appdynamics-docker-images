@@ -15,4 +15,5 @@ RUN echo "${APPD_AGENT_SHA256} *AppServerAgent-${APPD_AGENT_VERSION}.zip" >> app
     && unzip -oq AppServerAgent-${APPD_AGENT_VERSION}.zip -d /tmp 
 
 FROM openjdk:7-jre-slim
+RUN apt-get update && apt-get -y upgrade
 COPY --from=builder /tmp /opt/appdynamics

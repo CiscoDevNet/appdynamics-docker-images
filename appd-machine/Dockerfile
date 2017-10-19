@@ -13,8 +13,7 @@ RUN echo "${APPD_AGENT_SHA256} *MachineAgent-${APPD_AGENT_VERSION}.zip" >> appd_
 
 
 FROM openjdk:8-jre-slim
-
-# Install AppDynamics Machine Agent
+RUN apt-get update && apt-get -y upgrade
 COPY --from=builder /tmp /opt/appdynamics
 
 CMD ["sh", "-c", "java ${MACHINE_AGENT_PROPERTIES} -jar /opt/appdynamics/machineagent.jar"]

@@ -14,5 +14,6 @@ RUN echo "${APPD_AGENT_SHA256} *AppServerAgent-${APPD_AGENT_VERSION}.zip" >> app
     && unzip -oq AppServerAgent-${APPD_AGENT_VERSION}.zip -d /tmp 
 
 FROM tomcat:8-jre7-alpine
+RUN apk update && apk upgrade
 COPY --from=builder /tmp /opt/appdynamics
 COPY setenv.sh ${CATALINA_HOME}/bin/
