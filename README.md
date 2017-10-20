@@ -66,7 +66,7 @@ For both the Tomcat and Jetty-based images, the app server will start automatica
 
 ***OpenJDK-based Images***
 
-These images are provided for you to customize your own container builds.  They use OpenJDK base images (JRE and JDK variants are provided), with the AppDynamics Java Agent pre-installed in the /opt/appdynamics folder. Please see the [OpenJDK](https://store.docker.com/images/openjdk) documentation on the Docker Store for details of the base image. With these images, it is up to you how to configure the AppDyanmics Agent: you can use the AppDynamics node environment variables as described in the product [documentation](https://docs.appdynamics.com/display/PRO43/Use+Environment+Variables+for+Java+Agent+Settings).  See above for information on how to pass environment variables to the container at runtime.
+These images are provided for you to customize your own container builds.  They use OpenJDK base images (JRE and JDK variants are provided), with the AppDynamics Java Agent pre-installed in the /opt/appdynamics folder. Please see the [OpenJDK](https://store.docker.com/images/openjdk) documentation on the Docker Store for details of the base image. With these images, it is up to you how to configure the AppDynamics Agent: you can use the AppDynamics node environment variables as described in the product [documentation](https://docs.appdynamics.com/display/PRO43/Use+Environment+Variables+for+Java+Agent+Settings).  See above for information on how to pass environment variables to the container at runtime.
 
 ## Server Agent
 
@@ -94,13 +94,19 @@ This will build the following images:
 
 The agent is initialized using machine agent environment variables as described in the product [documentation](https://docs.appdynamics.com/display/PRO43/Standalone+Machine+Agent+Configuration+Property+Reference).  These can be passed to the container at run-time using environment variables (`-e` or `--env`) or env-file (`--env-file`): note that you do not need to pass either a node or tier name to run the Server Agent with Integrated Docker Visibility.
 
+The `MACHINE_AGENT_PROPERTIES` environment variable can be set to pass additional values to the machine agent at startup.  This allows you to run the container in three different ways:
+
+1. Standalone Machine Agent
+2. Server Agent (SIM-enabled)
+3. Server Agent (SIM-enabled) with Integrated Docker Visibility
+
 To enable Integrated Docker Visibility, you must run the container with two volume mounts that provide access to the host file system (read-only) and the UNIX domain socket for the Docker Engine API.  In addition, the following property must be set:
 
 `MACHINE_AGENT_PROPERTIES=-Dappdynamics.sim.enabled=true -Dappdynamics.docker.enabled=true`
 
 The example env-file (`appdynamics.env`) included in the *appd-machine* folder gives the environment variables that must be set in order for the agent to connect to the AppDynamics Controller.  
 
-The following example shows how to run the Server Agent container using environment variables:
+The following example shows how to run the Server Agent container with Integrated Docker Visibility using environment variables:
 
 ```
 docker run -d \
