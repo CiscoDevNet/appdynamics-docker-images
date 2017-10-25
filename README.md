@@ -115,7 +115,7 @@ docker run -d \
 -e APPD_SSL_ENABLED=<true-or-false> \
 -e APPD_ACCOUNT_NAME=<account-name> \
 -e APPD_ACCESS_KEY=<account-access-key> \
--e MACHINE_AGENT_PROPERTIES=-Dappdynamics.sim.enabled=true -Dappdynamics.docker.enabled=true \
+-e MACHINE_AGENT_PROPERTIES="-Dappdynamics.sim.enabled=true -Dappdynamics.docker.enabled=true" \
 -v /:/hostroot:ro -v /var/run/docker.sock:/var/run/docker.sock \
 appdynamics/machine:<VERSION>
 ```
