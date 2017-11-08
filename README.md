@@ -110,11 +110,11 @@ The following example shows how to run the Server Agent container with Integrate
 
 ```
 docker run -d \
--e APPD_HOST=<controller-host-name> \
--e APPD_PORT=<controller-port> \
--e APPD_SSL_ENABLED=<true-or-false> \
--e APPD_ACCOUNT_NAME=<account-name> \
--e APPD_ACCESS_KEY=<account-access-key> \
+-e APPDYNAMICS_CONTROLLER_HOST_NAME=<controller-host-name> \
+-e APPDYNAMICS_CONTROLLER_PORT=<controller-port> \
+-e APPDYNAMICS_CONTROLLER_SSL_ENABLED=<true-or-false> \
+-e APPDYNAMICS_AGENT_ACCOUNT_NAME=<account-name> \
+-e APPDYNAMICS_AGENT_ACCOUNT_ACCESS_KEY=<account-access-key> \
 -e MACHINE_AGENT_PROPERTIES="-Dappdynamics.sim.enabled=true -Dappdynamics.docker.enabled=true" \
 -v /:/hostroot:ro -v /var/run/docker.sock:/var/run/docker.sock \
 appdynamics/machine:<VERSION>
