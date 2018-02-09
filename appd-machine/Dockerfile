@@ -12,7 +12,7 @@ RUN echo "${APPD_AGENT_SHA256} *MachineAgent-${APPD_AGENT_VERSION}.zip" >> appd_
 
 
 FROM openjdk:8u151-jre-alpine3.7
-RUN apk add --no-cache iproute2 procps sysstat dumb-init
+RUN apk add --no-cache iproute2 procps sysstat dumb-init bash coreutils
 COPY --from=builder /tmp/unzip /opt/appdynamics
 
 ENTRYPOINT ["/usr/bin/dumb-init"]
