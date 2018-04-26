@@ -2,7 +2,7 @@ version: '3'
 
 services:
   jre8-alpine:
-    image: appdynamics/java:${APPD_AGENT_VERSION}_jre8-alpine
+    image: appdynamics/java:${APPD_AGENT_MAJOR_VERSION}_jre8-alpine
     build:
       context: .
       dockerfile: ./openjdk/8/jre/alpine/Dockerfile
@@ -11,7 +11,7 @@ services:
         APPD_AGENT_SHA256: 
 
   jre8-slim:
-    image: appdynamics/java:${APPD_AGENT_VERSION}_jre8-slim
+    image: appdynamics/java:${APPD_AGENT_MAJOR_VERSION}_jre8-slim
     build:
       context: .
       dockerfile: ./openjdk/8/jre/slim/Dockerfile
@@ -20,7 +20,7 @@ services:
         APPD_AGENT_SHA256:
 
   jdk8-alpine:
-    image: appdynamics/java:${APPD_AGENT_VERSION}_jdk8-alpine
+    image: appdynamics/java:${APPD_AGENT_MAJOR_VERSION}_jdk8-alpine
     build:
       context: .
       dockerfile: ./openjdk/8/jdk/alpine/Dockerfile
@@ -29,7 +29,7 @@ services:
         APPD_AGENT_SHA256:
 
   jdk8-slim:
-    image: appdynamics/java:${APPD_AGENT_VERSION}_jdk8-slim
+    image: appdynamics/java:${APPD_AGENT_MAJOR_VERSION}_jdk8-slim
     build:
       context: .
       dockerfile: ./openjdk/8/jdk/slim/Dockerfile
@@ -38,7 +38,7 @@ services:
         APPD_AGENT_SHA256:
 
   tomcat8-jre8-alpine:
-    image: appdynamics/java:${APPD_AGENT_VERSION}_tomcat8-jre8-alpine
+    image: appdynamics/java:${APPD_AGENT_MAJOR_VERSION}_tomcat8-jre8-alpine
     build:
       context: .
       dockerfile: ./tomcat/8/jre8-alpine/Dockerfile
@@ -47,7 +47,7 @@ services:
         APPD_AGENT_SHA256:
 
   tomcat9-jre8-alpine:
-    image: appdynamics/java:${APPD_AGENT_VERSION}_tomcat9-jre8-alpine
+    image: appdynamics/java:${APPD_AGENT_MAJOR_VERSION}_tomcat9-jre8-alpine
     build:
       context: .
       dockerfile: ./tomcat/9/jre8-alpine/Dockerfile
