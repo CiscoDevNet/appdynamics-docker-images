@@ -2,7 +2,7 @@ version: '3'
 
 services:
   machine:
-    image: appdynamics/machine:${APPD_AGENT_VERSION}
+    image: appdynamics/machine:${APPD_AGENT_MAJOR_VERSION}
     build:
       context: .
       args:
