@@ -1,0 +1,11 @@
+version: '3'
+
+services:
+  netviz:
+    image: appdynamics/netviz:${APPD_AGENT_MAJOR_VERSION}_centos7
+    build:
+      context: .
+      dockerfile: ./centos7/x86/Dockerfile
+      args:
+        APPD_AGENT_VERSION: 
+        APPD_AGENT_SHA256: 
