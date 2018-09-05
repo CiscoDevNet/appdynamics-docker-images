@@ -1,24 +1,18 @@
-FROM ubuntu:14.04
+FROM centos:centos7
 
-ARG NETVIZ_ZIP_PKG
+MAINTAINER mark.prichard@appdynamics.com
 
-RUN apt-get update && apt-get install -y \
-  net-tools \
-  tcpdump \
-  curl  \
-  unzip   \
-  ssh-client \
-  binutils \
-  build-essential \
-  vim
+ARG APPD_AGENT_VERSION 
+ARG APPD_AGENT_SHA256
+ARG
 
-WORKDIR /netviz-agent
+COPY appd-netviz-x64-linux-${APPD_AGENT_VERSION}.rpm /
+RUN echo "${APPD_AGENT_SHA256} *appd-netviz-x64-linux-${APPD_AGENT_VERSION}.rpm" >> appd_checksum \
+    && sha256sum -c appd_checksum \
+    && rm appd_checksum \
+    && rpm -ivh appd-netviz-x64-linux-${APPD_AGENT_VERSION}.rpm
 
-# copy NetViz agent contents
-COPY $NETVIZ_ZIP_PKG .
-
-# run the agent install script
-RUN unzip $NETVIZ_ZIP_PKG && ./install.sh
-
-# default command to run for the agent
-CMD  ./bin/appd-netagent -c ./conf -l ./logs -r ./run
+FROM centos:centos7
+COPY --from=builder /tmp /opt/appdynamics
+RUN service appd-netviz start
+CMD ["sh", "-c", "java ${MACHINE_AGENT_PROPERTIES} -jar /opt/appdynamics/machineagent.jar"]
