@@ -91,6 +91,7 @@ APPDYNAMICS_AGENT_TIER_NAME=tier
 
 ```
 $ docker run --env-file env  appdynamics/machine:local 
+
 Using Java Version [1.8.0_181] for Agent
 Using Agent Version [Machine Agent v4.5.1.1385 GA Build Date 2018-07-25 17:57:44]
 [INFO] Agent logging directory set to: [/opt/appdynamics]
