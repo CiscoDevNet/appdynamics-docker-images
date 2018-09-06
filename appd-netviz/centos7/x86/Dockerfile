@@ -6,10 +6,11 @@ ARG APPD_AGENT_VERSION
 ARG APPD_AGENT_SHA256
 
 COPY appd-netviz-x64-linux-${APPD_AGENT_VERSION}.rpm /
+COPY start.sh /
 RUN echo "${APPD_AGENT_SHA256} *appd-netviz-x64-linux-${APPD_AGENT_VERSION}.rpm" >> appd_checksum \
-         && sha256sum -c appd_checksum \
-         && rm appd_checksum \
-         && yum install -y initscripts \ 
-         && rpm -ivh appd-netviz-x64-linux-${APPD_AGENT_VERSION}.rpm
+    && sha256sum -c appd_checksum \
+    && rm appd_checksum \
+    && yum install -y initscripts \ 
+    && rpm -ivh appd-netviz-x64-linux-${APPD_AGENT_VERSION}.rpm
 
-CMD ["service", "appd-netviz", "start"]
+CMD ["./start.sh"]
