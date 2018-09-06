@@ -13,8 +13,8 @@
 
 ```
 (master)$ ls
-Dockerfile			appdynamics.env
-MachineAgent-4.5.1.1385.zip	docker-compose.yml
+Dockerfile			README.md			docker-compose.yml
+MachineAgent-4.5.1.1385.zip	appdynamics.env			env
 
 ```
 
