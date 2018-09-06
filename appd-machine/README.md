@@ -31,3 +31,13 @@ export APPD_AGENT_MAJOR_VERSION=local
 ```
 docker-compose build
 ```
+
+
+## Running the container
+
+- Just do a `docker run`
+
+```
+
+```
+
