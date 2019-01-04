@@ -116,7 +116,7 @@ docker run -d \
 -e APPDYNAMICS_AGENT_ACCOUNT_NAME=<account-name> \
 -e APPDYNAMICS_AGENT_ACCOUNT_ACCESS_KEY=<account-access-key> \
 -e MACHINE_AGENT_PROPERTIES="-Dappdynamics.sim.enabled=true -Dappdynamics.docker.enabled=true" \
--v /:/hostroot:ro -v /var/run/docker.sock:/var/run/docker.sock \
+-v /proc:/hostroot/proc:ro -v /sys:/hostroot/sys:ro -v /etc:/hostroot/etc:ro -v /var/run/docker.sock:/var/run/docker.sock \
 appdynamics/machine:<VERSION>
 ```
 
