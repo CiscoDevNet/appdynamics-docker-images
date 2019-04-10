@@ -1,0 +1,84 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: java-init-biq
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        tier: client-web
+        name: java-init
+    spec:
+      serviceAccountName: app-user-sa
+      initContainers:
+      - name: appd-agent
+        command:
+          - cp
+          - -ra
+          - /opt/temp/.
+          - /opt/appd/
+        image: appdynamics/java-agent:v4.5
+        imagePullPolicy: IfNotPresent
+        resources:
+          limits:
+            cpu: 200m
+            memory: 100M
+          requests:
+            cpu: 100m
+            memory: 50M
+        volumeMounts:
+        - mountPath: /opt/appd
+          name: appd-agent-repo
+      containers:
+      - name: java-init
+        image: java-service:v1
+        imagePullPolicy: IfNotPresent
+        envFrom:
+          - configMapRef:
+              name: apm-config
+        env:
+          - name: ACCOUNT_ACCESS_KEY
+            valueFrom:
+                secretKeyRef:
+                  key: appd-key
+                  name: appd-secret
+          - name: APPLICATION_NAME
+            value: JavaInit
+          - name: TIER_NAME
+            value: Web
+          - name: JAVA_OPTS
+            value: " -Dappdynamics.agent.accountAccessKey=$(ACCOUNT_ACCESS_KEY) 
+            -Dappdynamics.controller.hostName=$(CONTROLLER_HOST) 
+            -Dappdynamics.controller.port=$(CONTROLLER_PORT) 
+            -Dappdynamics.controller.ssl.enabled=$(CONTROLLER_SSL_ENABLED) 
+            -Dappdynamics.agent.accountName=$(ACCOUNT_NAME) 
+            -Dappdynamics.agent.applicationName=$(APPLICATION_NAME)
+            -Dappdynamics.agent.tierName=$(TIER_NAME)
+            -Dappdynamics.agent.reuse.nodeName=true
+            -Dappdynamics.agent.reuse.nodeName.prefix=$(TIER_NAME)
+            -javaagent:/opt/appd/javaagent.jar " 
+        volumeMounts:
+        - mountPath: /opt/appd
+          name: appd-agent-repo
+        ports:
+        - containerPort: 8080
+      restartPolicy: Always
+      volumes:
+        - name: appd-agent-repo
+          emptyDir: {}
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: client-web
+spec:
+  selector:
+    tier: client-web
+  ports:
+  - name: "8080"
+    port: 8080
+    targetPort: 8080
+status:
+  loadBalancer: {}
