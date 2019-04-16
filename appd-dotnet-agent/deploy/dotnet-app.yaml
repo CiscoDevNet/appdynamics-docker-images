@@ -1,0 +1,61 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: dotnet-app
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        name: dotnet-app
+    spec:
+      serviceAccountName: app-user-sa
+      initContainers:
+      - name: appd-agent
+        command:
+          - cp
+          - -ra
+          - /opt/temp/.
+          - /opt/appd
+        image: dotnet-agent:v1
+        imagePullPolicy: IfNotPresent
+        volumeMounts:
+        - mountPath: /opt/appd
+          name: appd-agent-repo
+      containers:
+      - name: dotnet-app
+        image: microsoft/dotnet-samples:aspnetapp
+        imagePullPolicy: IfNotPresent
+        envFrom:
+           - configMapRef:
+              name: dotnet-config
+        env:
+          - name: APPDYNAMICS_AGENT_ACCOUNT_ACCESS_KEY
+            valueFrom:
+                secretKeyRef:
+                  name: appd-secret
+                  key: appd-key
+        ports:
+        - containerPort: 80
+        volumeMounts:
+        - mountPath: /opt/appd
+          name: appd-agent-repo
+      restartPolicy: Always
+      volumes:
+        - name: appd-agent-repo
+          emptyDir: {}
+      
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: dotnet-app
+spec:
+  selector:
+    name: dotnet-app
+  ports:
+  - name: "80"
+    port: 80
+    targetPort: 80
+type: NodePort

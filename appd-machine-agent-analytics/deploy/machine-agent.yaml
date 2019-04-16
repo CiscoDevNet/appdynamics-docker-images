@@ -1,0 +1,73 @@
+apiVersion: extensions/v1beta1
+kind: DaemonSet
+metadata: 
+  name: appd-infra-agent
+spec: 
+  replicas: 1
+  template: 
+    metadata: 
+      labels: 
+        name: appd-infra-agent
+    spec:
+      serviceAccountName: appd-infra-sa
+      containers:
+      - name: appd-infra-agent
+        image: appdynamics/machine-agent:latest
+        imagePullPolicy: IfNotPresent
+        env:
+        - name: APPDYNAMICS_AGENT_ACCOUNT_ACCESS_KEY
+          valueFrom:
+            secretKeyRef:
+              key: appd-key
+              name: appd-secret
+        envFrom:
+        - configMapRef:
+            name: ma-config
+        securityContext:
+          privileged: true
+        resources:
+          limits:
+            cpu: "0.6"
+            memory: "2Gi"
+          requests:
+            cpu: "0.3"
+            memory: "1G"
+        ports:
+          - containerPort: 9090
+        volumeMounts:
+        - name: ma-log-volume
+          mountPath: /opt/appdynamics/MachineAgent/conf/logging/log4j.xml
+          subPath: log4j.xml
+        - mountPath: /hostroot
+          name: hostroot
+          readOnly: true
+        - mountPath: /var/run/docker.sock
+          name: docker-sock
+      restartPolicy: Always
+      volumes:
+      - name: ma-log-volume
+        configMap:
+          name: ma-log-config
+      - name: hostroot
+        hostPath:
+          path: /
+          type: Directory
+      - name: docker-sock
+        hostPath:
+          path: /var/run/docker.sock
+          type: Socket
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: appd-infra-agent-service
+spec:
+  selector:
+    name: appd-infra-agent
+  ports:
+  - name: "9090"
+    port: 9090
+    targetPort: 9090
+status:
+  loadBalancer: {}

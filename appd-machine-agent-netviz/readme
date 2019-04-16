@@ -1,0 +1,34 @@
+Build your own image of the machine agent with netviz
+
+Download the latest agent bundle from https://download.appdynamics.com/download/
+Make a note of sha256 checksum value and the full version of the agent (e.g. 4.5.9.2096)
+Run ./build.sh passing the version and the checksum. The checksum can be left blank to avoid validation. It is a best practice to validate the package integrity.
+
+Create a secret to hold appdynamics controller access key
+kubectl create secret generic appd-secret --from-literal=appd-key=<controller-access-key>
+
+Populate the configMap ma-config.yaml with values specific to your environment. Make sure you provide all the required values.
+Update the spec machine-agent.yaml with the reference to the newly built image
+
+Create a service account for deployment. In the attached spec of the machine agent with netviz, it is appd-infra-sa.
+The account needs to be privileged and have read-only access to cluster entities
+
+#deploy daemon set
+kubectl create -f machine-agent.yaml
+
+
+Example account creation in OpenShift
+
+#create a new project or use an existing one
+oc new-project ma
+
+#create a service account for the daemon set deployment
+oc create sa ma
+
+#make the account privileged, which is necessary for accessing docker api and host root
+oc adm policy add-scc-to-user privileged -z ma
+
+#assign account to the cluster-reader role to be able to read pod metadata
+oc adm policy add-cluster-role-to-user cluster-reader -z ma
+
+

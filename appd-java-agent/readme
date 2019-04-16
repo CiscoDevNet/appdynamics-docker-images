@@ -1,0 +1,7 @@
+Build your own java agent image
+
+Download the latest agent bundle from https://download.appdynamics.com/download/
+Make a note of sha256 checksum value and the full version of the agent (e.g. 4.5.9.2096)
+Run ./build.sh passing the version and the checksum. The checksum can be left blank to avoid validation. It is a best practice to validate the package integrity.
+
+An example yaml spec is provided to demonstrate how to deploy the AppDynamics java agent in the init container and pass it to the application to be instrumented. The example assumes that the application makes use of $JAVA_OPTS env var
