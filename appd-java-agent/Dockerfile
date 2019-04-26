@@ -20,7 +20,4 @@ RUN if [ "x${APPD_AGENT_SHA256}" != "x" ]; then \
 FROM openjdk:8-jre-alpine
 RUN apk update && apk upgrade
 
-RUN chgrp -R 0 / && \
-    chmod -R g=u /
-
 COPY --from=builder /tmp /opt/appdynamics
