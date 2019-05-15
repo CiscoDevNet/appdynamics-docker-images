@@ -71,7 +71,12 @@ $ oc create -f deploy/rbac-openshift.yaml
 * deploy the daemon set
 
 ```
-kubectl create -f deploy/machine-agent.yaml
+$ kubectl create -f deploy/machine-agent.yaml
 
+```
+
+```
+# on PKS run:
+$ kubectl create -f deploy/machine-agent-pks.yaml
 ```
 
