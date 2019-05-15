@@ -9,10 +9,10 @@ spec:
       labels: 
         name: appd-infra-agent
     spec:
-      serviceAccountName: appd-infra-sa
+      serviceAccountName: appdynamics-infraviz
       containers:
       - name: appd-infra-agent
-        image: appdynamics/machine-agent:latest
+        image: appdynamics/machine-agent-analytics:4.5.9
         imagePullPolicy: IfNotPresent
         env:
         - name: APPDYNAMICS_AGENT_ACCOUNT_ACCESS_KEY
@@ -36,7 +36,7 @@ spec:
           - containerPort: 9090
         volumeMounts:
         - name: ma-log-volume
-          mountPath: /opt/appdynamics/MachineAgent/conf/logging/log4j.xml
+          mountPath: /opt/appdynamics/conf/logging/log4j.xml
           subPath: log4j.xml
         - mountPath: /hostroot
           name: hostroot
