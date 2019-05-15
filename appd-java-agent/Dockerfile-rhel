@@ -17,7 +17,7 @@ RUN if [ "x${APPD_AGENT_SHA256}" != "x" ]; then \
      unzip -oq AppServerAgent-${APPD_AGENT_VERSION}.zip -d /tmp; \
    fi
 
-FROM openjdk:8-jre-alpine
+FROM rhel7-atomic
 RUN apk update && apk upgrade
 
 COPY --from=builder /tmp /opt/appdynamics

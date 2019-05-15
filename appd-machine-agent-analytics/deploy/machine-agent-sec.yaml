@@ -9,12 +9,10 @@ spec:
       labels: 
         name: appd-infra-agent
     spec:
-      serviceAccountName: appd-infra-sa
-      hostIPC: true
-      hostNetwork: true
+      serviceAccountName: appdynamics-infraviz
       containers:
       - name: appd-infra-agent
-        image: appdynamics/machine-agent-netviz:4.5.9.2
+        image: appdynamics/machine-agent-analytics:4.5.9
         imagePullPolicy: IfNotPresent
         env:
         - name: APPDYNAMICS_AGENT_ACCOUNT_ACCESS_KEY
@@ -27,8 +25,6 @@ spec:
             name: ma-config
         securityContext:
           privileged: true
-          capabilities:
-            add: ["NET_ADMIN", "NET_RAW"]
         resources:
           limits:
             cpu: "0.6"
@@ -38,14 +34,18 @@ spec:
             memory: "1G"
         ports:
           - containerPort: 9090
-          - containerPort: 3892
-            hostPort: 3892
         volumeMounts:
         - name: ma-log-volume
           mountPath: /opt/appdynamics/conf/logging/log4j.xml
           subPath: log4j.xml
-        - mountPath: /hostroot
-          name: hostroot
+        - mountPath: /hostroot/sys
+          name: hostroot-sys
+          readOnly: true
+        - mountPath: /hostroot/proc
+          name: hostroot-proc
+          readOnly: true
+        - mountPath: /hostroot/etc
+          name: hostroot-etc
           readOnly: true
         - mountPath: /var/run/docker.sock
           name: docker-sock
@@ -54,9 +54,17 @@ spec:
       - name: ma-log-volume
         configMap:
           name: ma-log-config
-      - name: hostroot
+      - name: hostroot-proc
         hostPath:
-          path: /
+          path: /proc
+          type: Directory
+      - name: hostroot-sys
+        hostPath:
+          path: /sys
+          type: Directory
+      - name: hostroot-etc
+        hostPath:
+          path: /etc
           type: Directory
       - name: docker-sock
         hostPath:
@@ -75,8 +83,5 @@ spec:
   - name: "9090"
     port: 9090
     targetPort: 9090
-  - name: "3892"
-    port: 3892
-    targetPort: 3892
 status:
   loadBalancer: {}

@@ -48,5 +48,7 @@ JAVA_OPTS=${MA_PROPERTIES}
 # Start Machine Agent
 ${MACHINE_AGENT_HOME}/bin/machine-agent -d -p ${MACHINE_AGENT_HOME}/pidfile
 
+cd ${MACHINE_AGENT_HOME}/extensions/NetVizExtension/agent
+
 #start NetViz
-${MACHINE_AGENT_HOME}/extensions/NetVizExtension/agent/bin/appd-netviz.sh
+./bin/appd-netagent -c ./conf -l ./logs -r ./run
