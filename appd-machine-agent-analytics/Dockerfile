@@ -1,5 +1,5 @@
 
-FROM openjdk:8-jre-slim AS builder
+FROM openjdk:8u151-jre-alpine3.7 AS builder
 
 MAINTAINER mark.prichard@appdynamics.com
 
@@ -17,8 +17,10 @@ RUN if [ "x${APPD_AGENT_SHA256}" != "x" ]; then \
     fi
 
 
-FROM openjdk:8-jre-slim
-RUN apt-get update && apt-get -y upgrade && apt-get install -y unzip bash gawk sed grep bc coreutils && apt-get install -y apt-utils && apt-get install -y iproute2 && apt-get install -y procps && apt-get install -y sysstat
+FROM openjdk:8u151-jre-alpine3.7
+RUN apk add --no-cache iproute2 procps sysstat dumb-init bash coreutils sed
+
+
 COPY --from=builder /tmp /opt/appdynamics
 
 ENV MACHINE_AGENT_HOME /opt/appdynamics
