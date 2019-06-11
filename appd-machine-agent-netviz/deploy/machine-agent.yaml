@@ -3,13 +3,12 @@ kind: DaemonSet
 metadata: 
   name: appd-infra-agent
 spec: 
-  replicas: 1
   template: 
     metadata: 
       labels: 
         name: appd-infra-agent
     spec:
-      serviceAccountName: appd-infra-sa
+      serviceAccountName: appdynamics-infraviz
       hostIPC: true
       hostNetwork: true
       containers:
