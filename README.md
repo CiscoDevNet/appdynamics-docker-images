@@ -17,7 +17,7 @@ These can both be obtained from the [AppDynamics Download Site](https://download
 
 Set the following environment variables - these will be passed automatically to `docker-compose` at build time :
 
-* `APPD_AGENT_VERSION`: the 4-digit version string
+* `APPD_AGENT_VERSION`: the version string (e.g. 4.5.9.2096)
 * `APPD_AGENT_SHA256`: the SHA256 checksum for the installer
 
 Change directory to the appd-java folder and run `docker-compose build`
@@ -81,7 +81,7 @@ These can both be obtained from the [AppDynamics Download Site](https://download
 
 Set the following environment variables - these will be passed automatically to `docker-compose` at build time :
 
-* `APPD_AGENT_VERSION`: the 4-digit version string
+* `APPD_AGENT_VERSION`: the version string (e.g. 4.5.9.2096)
 * `APPD_AGENT_SHA256`: the SHA256 checksum for the installer
 
 Change directory to the appd-machine folder and run `docker-compose build`
