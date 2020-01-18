@@ -9,14 +9,14 @@ ARG APPD_AGENT_SHA256
 RUN apt-get update -y; \
  apt-get install -y unzip
 
-COPY MachineAgent-${APPD_AGENT_VERSION}.zip /
+COPY dbagent-${APPD_AGENT_VERSION}.zip /
 RUN if [ "x${APPD_AGENT_SHA256}" != "x" ]; then \ 
-	echo "${APPD_AGENT_SHA256} *MachineAgent-${APPD_AGENT_VERSION}.zip" >> appd_checksum \
+	echo "${APPD_AGENT_SHA256} *dbagent-${APPD_AGENT_VERSION}.zip" >> appd_checksum \
     && sha256sum -c appd_checksum \
     && rm appd_checksum \
-    && unzip -oq MachineAgent-${APPD_AGENT_VERSION}.zip -d /tmp; \
+    && unzip -oq dbagent-${APPD_AGENT_VERSION}.zip -d /tmp; \
     else \
-     unzip -oq MachineAgent-${APPD_AGENT_VERSION}.zip -d /tmp; \
+     unzip -oq dbagent-${APPD_AGENT_VERSION}.zip -d /tmp; \
     fi
 
 
@@ -28,12 +28,10 @@ RUN apt-get update -y; \
 
 COPY --from=builder /tmp /opt/appdynamics
 
-ENV MACHINE_AGENT_HOME /opt/appdynamics
+ENV DB_AGENT_HOME /opt/appdynamics
 
-WORKDIR ${MACHINE_AGENT_HOME}
+WORKDIR ${DB_AGENT_HOME}
 
-COPY updateAnalyticsAgent.sh ./updateAnalyticsAgent.sh
-RUN chmod +x ./updateAnalyticsAgent.sh
 
 COPY startup.sh ./startup.sh
 RUN chmod +x ./startup.sh
@@ -42,6 +40,5 @@ RUN chmod +x ./startup.sh
 RUN chgrp -R 0 /opt && \
     chmod -R g=u /opt
 
-EXPOSE 9090
 
 CMD "./startup.sh"

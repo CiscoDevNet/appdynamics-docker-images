@@ -1,0 +1,62 @@
+apiVersion: extensions/v1beta1
+kind: DaemonSet
+metadata:
+  labels:
+    infraViz_cr: appd-infraviz
+    name: infraViz
+  name: appd-infraviz
+  namespace: appdynamics
+spec:
+  selector:
+    matchLabels:
+      infraViz_cr: appd-infraviz
+      name: infraViz
+  template:
+    metadata:
+      labels:
+        infraViz_cr: appd-infraviz
+        name: infraViz
+    spec:
+      containers:
+      - image: docker.io/appdynamics/machine-agent-netviz:4.5.8
+        imagePullPolicy: Always
+        name: appd-netviz-agent
+        ports:
+        - containerPort: 3892
+          hostPort: 3892
+          protocol: TCP
+        resources:
+          limits:
+            cpu: 200m
+            memory: 300Mi
+          requests:
+            cpu: 100m
+            memory: 150Mi
+        securityContext:
+          capabilities:
+            add:
+            - NET_ADMIN
+            - NET_RAW
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        volumeMounts:
+        - mountPath: /netviz-agent/conf/agent_config.lua
+          name: netviz-volume
+          subPath: agent_config.lua
+      dnsPolicy: ClusterFirst
+      hostIPC: true
+      hostNetwork: true
+      hostPID: true
+      restartPolicy: Always
+      serviceAccount: appdynamics-infraviz
+      serviceAccountName: appdynamics-infraviz
+      terminationGracePeriodSeconds: 30
+      volumes:
+      - configMap:
+          defaultMode: 420
+          name: netviz-config
+        name: netviz-volume
+  updateStrategy:
+    rollingUpdate:
+      maxUnavailable: 1
+    type: RollingUpdate

@@ -1,7 +1,15 @@
 
-FROM openjdk:8-jre-slim AS builder
+FROM registry.access.redhat.com/ubi7/ubi AS builder
 
 MAINTAINER mark.prichard@appdynamics.com
+
+LABEL name="AppDynamics MachineAgent" \
+      vendor="AppDynamics" \
+      version="4.5.16" \
+      release="1" \
+      url="https://www.appdynamics.com" \
+      summary="AppDynamics solution for monitoring infrastructure" \
+      description="The MachineAgent monitors resource utilization, server load and process on the host."
 
 ARG APPD_AGENT_VERSION 
 ARG APPD_AGENT_SHA256
@@ -17,7 +25,7 @@ RUN if [ "x${APPD_AGENT_SHA256}" != "x" ]; then \
     fi
 
 
-FROM registry.access.redhat.com/rhel7/rhel
+FROM registry.access.redhat.com/ubi7/ubi
 
 RUN yum install java-1.8.0-openjdk -y && \
     yum clean all && \

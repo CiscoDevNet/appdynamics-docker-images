@@ -1,0 +1,10 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: mysql-promotions
+spec:
+  type: ExternalName
+  externalName: mysql-promotions.dev.svc.cluster.local
+  ports:
+  - port: 3306
+    targetPort: 3306

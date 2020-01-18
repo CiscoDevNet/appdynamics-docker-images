@@ -8,8 +8,29 @@ spec:
       labels: 
         name: appd-infra-agent
     spec:
+      hostIPC: true
+      hostNetwork: true
       serviceAccountName: appdynamics-infraviz
       containers:
+      - name: appd-netviz-agent
+        image: appdynamics/machine-agent-netviz:latest
+        resources:
+          requests:
+            memory: "150Mi"
+            cpu: "0.1"
+          limits:
+            memory: "250Mi"
+            cpu: "0.2"
+        securityContext:
+          capabilities:
+            add: ["NET_ADMIN", "NET_RAW"]
+        ports:
+        - containerPort: 3892
+          hostPort: 3892
+        volumeMounts:
+        - name: netviz-volume
+          mountPath: /netviz-agent/conf/agent_config.lua
+          subPath: agent_config.lua
       - name: appd-infra-agent
         image: appdynamics/machine-agent-analytics:latest
         imagePullPolicy: IfNotPresent
@@ -17,8 +38,8 @@ spec:
         - name: APPDYNAMICS_AGENT_ACCOUNT_ACCESS_KEY
           valueFrom:
             secretKeyRef:
-              key: appd-key
-              name: appd-secret
+              key: controller-key
+              name: cluster-agent-secret
         envFrom:
         - configMapRef:
             name: ma-config
@@ -26,11 +47,11 @@ spec:
           privileged: true
         resources:
           limits:
-            cpu: "0.6"
-            memory: "2Gi"
-          requests:
             cpu: "0.3"
-            memory: "1G"
+            memory: "400M"
+          requests:
+            cpu: "0.2"
+            memory: "300M"
         ports:
           - containerPort: 9090
         volumeMounts:
@@ -40,11 +61,13 @@ spec:
         - mountPath: /hostroot
           name: hostroot
           readOnly: true
+        - mountPath: /var/run/docker.sock
+          name: docker-sock
       restartPolicy: Always
-      tolerations:
-      - key: "node-role.kubernetes.io/master"
-        effect: "NoSchedule"  
       volumes:
+      - name: netviz-volume
+        configMap:
+          name: netviz-config
       - name: ma-log-volume
         configMap:
           name: ma-log-config
@@ -52,18 +75,7 @@ spec:
         hostPath:
           path: /
           type: Directory
-
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: appd-infra-agent-service
-spec:
-  selector:
-    name: appd-infra-agent
-  ports:
-  - name: "9090"
-    port: 9090
-    targetPort: 9090
-status:
-  loadBalancer: {}
+      - name: docker-sock
+        hostPath:
+          path: /var/run/docker.sock
+          type: Socket

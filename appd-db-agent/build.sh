@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-IMAGE_NAME=appdynamics/machine-agent-analytics
+IMAGE_NAME=appdynamics/db-agent
 if [ "x$3" != "x" ]; then
   IMAGE_NAME=$3
 fi

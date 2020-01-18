@@ -1,0 +1,63 @@
+apiVersion: v1
+data:
+  agent_config.lua: "--\n-- Copyright (c) 2019 AppDynamics Inc.\n-- All rights reserved.\n--\n--
+    $Id$\npackage.path = './?.lua;' .. package.path\nrequire \"config_helper\"\n\nROOT_DIR=\"/netviz-agent\"\nINSTALL_DIR=ROOT_DIR\n--
+    Define a unique hostname for identification on controller\nUNIQUE_HOST_ID = \"\"\n\n--\n--
+    NPM global configuration\n-- Configurable params\n-- {\n--\tenable_monitor = 0/1,\t--
+    def:0, enable/disable monitoring\n--\tdisable_filter = 0/1,\t-- def:0, disable/enable
+    language agent filtering\n--\tmode = KPI/Diagnostic/Advanced,\t-- def:KPI\n--\tenable_netlib
+    = 0/1,\t-- def:0, using netlib to map appid with tuples.\n--\tlua_scripts_path\t--
+    Path to lua scripts.\n--\tenable_fqdn = 0/1\t-- def:0, enable/disable fqdn resolution
+    of ip\n-- }\n--\nnpm_config = {\n\tlog_destination = \"file\",\n\tlog_file = \"appd-netagent.log\",\n\tdebug_log_file
+    = \"agent-debug.log\",\n\tdisable_filter = 1,\n\tmode = \"KPI\",\n\tenable_netlib
+    = 1,\n\tlua_scripts_path = ROOT_DIR .. \"/scripts/netagent/lua\",\n\tenable_fqdn
+    = 1,\n}\n\n--\n-- Webserver configuration\n-- Configurable params\n-- {\n--\tport
+    = ,\t\t-- Port on which to open the webserver\n--\trequest_timeout = , -- Request
+    timeout in ms\n--\tthreads = ,\t\t-- Number of threads on the webserver\n-- }\n--\nwebserver_config
+    = {\n\tport = 3892,\n\trequest_timeout = 10000,\n\tthreads = 2,\n}\n\n--\n-- Packet
+    capture configurations (multiple captures can be configured)\n-- Confiurable params,
+    there can be multiple of these.\n-- {\n-- \tcap_module = \"pcap\",\t\t-- def:\"pcap\",
+    capture module\n-- \tcap_type = \"device\"/\"file\",\t-- def:\"device\", type
+    of capture\n-- \tifname = \"\",\t\t-- def:\"any\", interface name/pcap filename\n--
+    \tenable_promisc = 0/1,\t-- def:0, promiscuous mode pkt capture\n-- \tthinktime
+    = ,\t\t-- def: 100, time in msec, to sleep if no pkts\n-- \tsnaplen = ,\t\t--
+    def:1518. pkt capture len\n-- \tbuflen = ,\t\t-- def:2. pcap buffer size in MB\n--
+    \tppi = ,\t\t\t-- def:32. pcap ppi\n-- },\n--\ncapture = {\n\t-- first capture
+    interface\n\t{\n\t\tcap_module = \"pcap\",\n\t\tcap_type = \"device\",\n\t\tifname
+    = \"any\",\n\t\tthinktime = 25,\n\t\tbuflen = 48,\n--\t\tfilter = \"\",\n\t},\n--[[\t{\n\t\tcap_module
+    = \"pcap\",\n\t\tcap_type = \"device\",\n\t\tifname = \"en0\",\n\t},\n--]]\n}\n\n--\n--
+    IP configuration\n-- ip_config = {\n--\texpire_timeout = ,\t-- Mins after which
+    we expire ip metadata\n--\tretry_count = ,\t\t-- No of tries to resolve fqdn for
+    ip\n-- }\nip_config = {\n\texpire_interval = 20,\n\tretry_count = 5,\n}\n\n--\n--
+    DPI configuration\n-- Configurable params\n-- {\n--\tmax_flows = ,\t-- Max number
+    of flows per fg to DPI at any given time.\n--\tmax_data = ,\t-- Max mega bytes
+    to DPI per flow.\n--\tmax_depth = ,\t-- Max bytes to DPI in a packet\n--\tmax_callchains
+    = , -- Max callchains to store for a flowgroup\n--\tmax_cc_perflow = , -- Max
+    number of call chains to look for in each flow\n-- }\n--\ndpi_config = {\n\tmax_flows
+    = 10,\n\tmax_data = 4,\n\tmax_depth = 4096,\n\tmax_callchains_in_fg = 32,\n\tmax_callchains_in_flow
+    = 2,\n}\n\n-- Configurations for application service ports\n-- {\n--\tports =
+    ,\t-- Comma separated list of application service\n--\t\t\t   ports greater than
+    32000. Example\n--\t\t\t   ports = \"40000, 41000, 42000\"\n-- }\n--[[\napplication_service_ports
+    = {\n\tports = \"\",\n}\n--]]\n\n--\n-- Export data from network agent configuration/tunnables\n--
+    Configurable params, there can be multiple of these.\n-- {\n-- \texportype = \"file\"/\"remote\",\t--
+    type of export mechanism\n-- \tstatsfile = \"\",\t\t\t-- filename for stats export\n--
+    \tmetricsfile = \"\", \t\t-- filename for metrics export\n-- \tserialization =
+    \"pb\",\t\t-- pb/capnp, serialization module\n-- \ttransport = \"zmq\", \t\t--
+    def:\"zmq\", transport module\n-- \tzmqdest = \"\", \t\t\t-- dest peer for zmq\n--
+    \ },\n--\nexport_config = {\n\t-- file export\n\t{\n\t\texporttype = \"file\",\n\t\tstatsfile
+    = \"agent-stats.log\",\n\t\tmetricsfile = \"agent-metrics.log\",\n\t\teventsfile
+    =  \"agent-events.log\",\n\t\tsnapshotsfile = \"agent-snapshots.log\",\n\t\tmetadatafile
+    = \"agent-metadata.log\",\n\t},\n}\n\n-- Plugin interface configuration.\n-- List
+    of interfaces to be monitored by supported plugins.\n-- Configurable params, there
+    can be multiple of these.\n-- {\n-- \tinterface = \"eth0\",\t-- def: \"eth0\",
+    interface name\n-- }\nplugin_if_config = {\n--[[\n\t{interface = \"eth0\"},\n--]]\n}\n\n--
+    Plugin process configuration.\n-- List of processes to be monitored by supported
+    plugins.\n-- Configurable params, there can be multiple of these.\n-- {\n--\tprocess
+    = \"\",\t\t-- def: \"appd-netagent\", process name\n-- }\nplugin_proc_config =
+    {\n\t{process = \"appd-netagent\"},\n}\n\n-- metadata to pass to pass the agent
+    metadata specific params\nsystem_metadata = {\n\tunique_host_id = UNIQUE_HOST_ID,\n\tinstall_dir
+    = INSTALL_DIR,\n\tinstall_time = get_last_update_time(),\n}\n"
+kind: ConfigMap
+metadata:
+  name: netviz-config
+  namespace: appdynamics

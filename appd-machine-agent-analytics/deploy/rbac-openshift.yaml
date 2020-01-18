@@ -74,8 +74,6 @@ allowHostPorts: true
 allowPrivilegedContainer: true
 allowedCapabilities:
 - '*'
-allowedFlexVolumes: null
-defaultAddCapabilities: null
 fsGroup:
   type: RunAsAny
 priority: null

@@ -17,6 +17,9 @@ RUN if [ "x${APPD_AGENT_SHA256}" != "x" ]; then \
      unzip -oq AppServerAgent-${APPD_AGENT_VERSION}.zip -d /tmp; \
    fi
 
+COPY ./cacerts.jks /tmp/ver4.5.13.27526/conf/
+COPY ./tools.jar /tmp/
+
 FROM rhel7-atomic
 RUN apk update && apk upgrade
 
