@@ -1,6 +1,6 @@
 FROM alpine AS builder
 
-MAINTAINER mark.prichard@appdynamics.com
+MAINTAINER support@appdynamics.com
 
 ARG APPD_AGENT_VERSION 
 ARG APPD_AGENT_SHA256
