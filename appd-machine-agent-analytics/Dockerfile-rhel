@@ -1,11 +1,11 @@
 
-FROM registry.access.redhat.com/ubi7/ubi AS builder
+FROM registry.access.redhat.com/rhel7-minimal
 
 MAINTAINER support@appdynamics.com
 
 LABEL name="AppDynamics MachineAgent" \
       vendor="AppDynamics" \
-      version="4.5.16" \
+      version="4.5.18" \
       release="1" \
       url="https://www.appdynamics.com" \
       summary="AppDynamics solution for monitoring infrastructure" \
@@ -14,39 +14,27 @@ LABEL name="AppDynamics MachineAgent" \
 ARG APPD_AGENT_VERSION 
 ARG APPD_AGENT_SHA256
 
-RUN yum install unzip -y && \
-    yum clean all && \
-    rm -rf /var/cache/yum
+RUN microdnf --enablerepo=rhel-7-server-rpms install bash procps sysstat sed coreutils  unzip shadow-utils iproute java-1.8.0-openjdk-headless --nodocs
+RUN microdnf clean all
+
+ENV MACHINE_AGENT_HOME /opt/appdynamics
+WORKDIR ${MACHINE_AGENT_HOME}
 
 COPY MachineAgent-${APPD_AGENT_VERSION}.zip /
 RUN if [ "x${APPD_AGENT_SHA256}" != "x" ]; then \ 
 	echo "${APPD_AGENT_SHA256} *MachineAgent-${APPD_AGENT_VERSION}.zip" >> appd_checksum \
     && sha256sum -c appd_checksum \
     && rm appd_checksum \
-    && unzip -oq MachineAgent-${APPD_AGENT_VERSION}.zip -d /tmp; \
+    && unzip -oq /MachineAgent-${APPD_AGENT_VERSION}.zip -d ${MACHINE_AGENT_HOME}; \
     else \
-     unzip -oq MachineAgent-${APPD_AGENT_VERSION}.zip -d /tmp; \
+     unzip -oq /MachineAgent-${APPD_AGENT_VERSION}.zip -d ${MACHINE_AGENT_HOME}; \
     fi
 
 ADD LICENSE /licenses/
 
-FROM registry.access.redhat.com/ubi7/ubi
-
-RUN yum install -y java-1.8.0-openjdk iproute2  && \
-    yum clean all && \
-    rm -rf /var/cache/yum
-
 
 RUN groupadd appdynamics && \
     useradd appdynamics -g appdynamics 
-
-COPY --from=builder /tmp /opt/appdynamics
-
-COPY --from=builder /licenses /licenses
-
-ENV MACHINE_AGENT_HOME /opt/appdynamics
-
-WORKDIR ${MACHINE_AGENT_HOME}
 
 COPY updateAnalyticsAgent.sh ./updateAnalyticsAgent.sh
 RUN chmod +x ./updateAnalyticsAgent.sh
@@ -54,9 +42,9 @@ RUN chmod +x ./updateAnalyticsAgent.sh
 COPY startup.sh ./startup.sh
 RUN chmod +x ./startup.sh
 
-RUN chown -R appdynamics:appdynamics /opt/appdynamics && chmod 744 ${MACHINE_AGENT_HOME}
+RUN chown -R appdynamics:appdynamics ${MACHINE_AGENT_HOME} && chmod 744 ${MACHINE_AGENT_HOME}
 
-RUN chgrp -R 0 /opt/appdynamics && chmod -R g+w /opt/appdynamics
+RUN chgrp -R 0 ${MACHINE_AGENT_HOME} && chmod -R g+w ${MACHINE_AGENT_HOME}
 
 USER appdynamics
 
