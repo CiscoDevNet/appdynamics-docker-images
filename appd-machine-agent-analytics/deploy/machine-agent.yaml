@@ -1,8 +1,11 @@
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: DaemonSet
 metadata: 
   name: appd-infra-agent
 spec: 
+  selector:
+    matchLabels:
+      name: appd-infra-agent
   template: 
     metadata: 
       labels: 
@@ -40,10 +43,9 @@ spec:
         - mountPath: /hostroot
           name: hostroot
           readOnly: true
+        - mountPath: /var/run/docker.sock
+          name: docker-sock
       restartPolicy: Always
-      tolerations:
-      - key: "node-role.kubernetes.io/master"
-        effect: "NoSchedule"  
       volumes:
       - name: ma-log-volume
         configMap:
@@ -52,6 +54,10 @@ spec:
         hostPath:
           path: /
           type: Directory
+      - name: docker-sock
+        hostPath:
+          path: /var/run/docker.sock
+          type: Socket
 
 ---
 apiVersion: v1
