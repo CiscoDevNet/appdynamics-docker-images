@@ -1,5 +1,16 @@
 
 FROM centos:centos7
+
+MAINTAINER AppDynamics
+
+LABEL name="AppDynamics Network Agent" \
+      vendor="AppDynamics" \
+      version="4.5.11" \
+      release="1" \
+      url="https://www.appdynamics.com" \
+      summary="AppDynamics solution for monitoring infrastructure" \
+      description="The Network Agent monitors communications between applications across multiple hosts from the network point of view."
+
  
 RUN yum update -y && yum install -y \
   iproute \
