@@ -5,7 +5,7 @@ MAINTAINER support@appdynamics.com
 
 LABEL name="AppDynamics MachineAgent" \
       vendor="AppDynamics" \
-      version="4.5.16" \
+      version="20.3.2" \
       release="1" \
       url="https://www.appdynamics.com" \
       summary="AppDynamics solution for monitoring infrastructure" \
@@ -34,9 +34,6 @@ RUN apt-get update -y; \
  apt-get install -y --no-install-recommends iproute2 procps sysstat dumb-init bash coreutils sed; \
 	rm -rf /var/lib/apt/lists/*
 
-RUN groupadd appdynamics && \
-    useradd appdynamics -g appdynamics 
-
 COPY --from=builder /tmp /opt/appdynamics
 COPY --from=builder /licenses /licenses
 
@@ -50,11 +47,6 @@ RUN chmod +x ./updateAnalyticsAgent.sh
 COPY startup.sh ./startup.sh
 RUN chmod +x ./startup.sh
 
-RUN chown -R appdynamics:appdynamics /opt/appdynamics && chmod 744 ${MACHINE_AGENT_HOME}
-
-RUN chgrp -R 0 /opt/appdynamics && chmod -R g+w /opt/appdynamics
-
-USER appdynamics
 
 EXPOSE 9090
 
