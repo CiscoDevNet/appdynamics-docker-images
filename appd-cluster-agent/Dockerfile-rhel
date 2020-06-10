@@ -4,7 +4,7 @@ MAINTAINER AppDynamics
 
 LABEL name="AppDynamics ClusterAgent" \
       vendor="AppDynamics" \
-      version="20.6.0" \
+      version="20.5.0" \
       release="1" \
       url="https://www.appdynamics.com" \
       summary="AppDynamics monitoring solution for applications deployed to Kubernetes clusters" \
@@ -18,7 +18,6 @@ RUN microdnf --enablerepo=rhel-7-server-rpms install unzip shadow-utils  --nodoc
 # Install AppDynamics Cluster Agent
 ENV CLUSTER_AGENT_HOME /opt/appdynamics/cluster-agent/
 ADD cluster-agent.zip /tmp/cluster-agent.zip
-ADD LICENSE /licenses/
 
 # Create a group and user
 RUN groupadd appdynamics && \
