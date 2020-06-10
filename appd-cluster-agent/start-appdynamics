@@ -1,0 +1,80 @@
+#!/bin/sh
+
+# Initializing CA_PROPERTIES variable
+CLUSTER_AGENT_HOME_DIRECTORY=${PWD}
+
+# Start Cluster Agent
+cd $CLUSTER_AGENT_HOME_DIRECTORY
+
+CA_PROPERTIES=""
+
+# Account Name
+if [ -n "$APPDYNAMICS_AGENT_ACCOUNT_NAME" ]; then
+    CA_PROPERTIES="${CA_PROPERTIES} -appdynamics.agent.accountName=$APPDYNAMICS_AGENT_ACCOUNT_NAME"
+fi
+
+# Controller host
+if [ -n "$APPDYNAMICS_CONTROLLER_HOST_NAME" ]; then
+    CA_PROPERTIES="${CA_PROPERTIES} -appdynamics.controller.hostName=$APPDYNAMICS_CONTROLLER_HOST_NAME"
+fi
+
+# Controller port
+if [ -n "$APPDYNAMICS_CONTROLLER_PORT" ]; then
+    CA_PROPERTIES="${CA_PROPERTIES} -appdynamics.controller.port=$APPDYNAMICS_CONTROLLER_PORT"
+fi
+
+# ssl enabled
+if [ -n "$APPDYNAMICS_CONTROLLER_SSL_ENABLED" ]; then
+    CA_PROPERTIES="${CA_PROPERTIES} -appdynamics.controller.ssl.enabled=$APPDYNAMICS_CONTROLLER_SSL_ENABLED"
+fi
+
+# Cluster Name
+if [ -n "$APPDYNAMICS_CLUSTER_NAME" ]; then
+    export APPDYNAMICS_AGENT_CLUSTER_NAME=$APPDYNAMICS_CLUSTER_NAME
+fi
+
+# Monitored Resources
+if [ -n "$APPDYNAMICS_CLUSTER_MONITORED_RESOURCES" ]; then
+    CA_PROPERTIES="${CA_PROPERTIES} -appdynamics.agent.monitoredResources=$APPDYNAMICS_CLUSTER_MONITORED_RESOURCES"
+fi
+
+# Monitored Namespaces
+if [ -n "$APPDYNAMICS_CLUSTER_MONITORED_NAMESPACES" ]; then
+    CA_PROPERTIES="${CA_PROPERTIES} -appdynamics.agent.monitoredNamespaces=$APPDYNAMICS_CLUSTER_MONITORED_NAMESPACES"
+fi
+
+# Event Upload Interval
+if [ -n "$APPDYNAMICS_CLUSTER_EVENT_UPLOAD_INTERVAL" ]; then
+    CA_PROPERTIES="${CA_PROPERTIES} -appdynamics.agent.event.upload.interval=$APPDYNAMICS_CLUSTER_EVENT_UPLOAD_INTERVAL"
+fi
+
+# Container Registration Interval
+if [ -n "$APPDYNAMICS_CLUSTER_CONTAINER_REGISTRATION_INTERVAL" ]; then
+    CA_PROPERTIES="${CA_PROPERTIES} -appdynamics.docker.container.registration.interval=$APPDYNAMICS_CLUSTER_CONTAINER_REGISTRATION_INTERVAL"
+fi
+
+# Http Client Timeout Interval
+if [ -n "$APPDYNAMICS_CLUSTER_HTTP_CLIENT_TIMEOUT_INTERVAL" ]; then
+    CA_PROPERTIES="${CA_PROPERTIES} -appdynamics.agent.httpClient.timeout.interval=$APPDYNAMICS_CLUSTER_HTTP_CLIENT_TIMEOUT_INTERVAL"
+fi
+
+# log output directory
+if [ -n "$APPDYNAMICS_CLUSTER_LOG_OUTPUT_DIRECTORY" ]; then
+    CA_PROPERTIES="${CA_PROPERTIES} -appdynamics.agent.logOutputDirectory=$APPDYNAMICS_CLUSTER_LOG_OUTPUT_DIRECTORY"
+fi
+
+# Additional properties for the cluster agent
+if [ -n "$APPDYNAMICS_CLUSTER_ADDITIONAL_PROPERTIES" ]; then
+	CA_PROPERTIES="${CA_PROPERTIES} $APPDYNAMICS_CLUSTER_ADDITIONAL_PROPERTIES"
+fi
+
+echo "CA_PROPERTIES=$CA_PROPERTIES"
+echo "APPDYNAMICS_AGENT_CLUSTER_NAME=$APPDYNAMICS_AGENT_CLUSTER_NAME"
+
+# access key
+if [ -n "$APPDYNAMICS_AGENT_ACCOUNT_ACCESS_KEY" ]; then
+    CA_PROPERTIES="${CA_PROPERTIES} -appdynamics.agent.accountAccessKey=$APPDYNAMICS_AGENT_ACCOUNT_ACCESS_KEY"
+    echo "Property -appdynamics.agent.accountAccessKey successfully read and added to CA_PROPERTIES"
+fi
+
+./cluster-agent ${CA_PROPERTIES}
