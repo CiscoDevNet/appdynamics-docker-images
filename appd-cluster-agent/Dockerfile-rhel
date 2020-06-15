@@ -18,6 +18,7 @@ RUN microdnf --enablerepo=rhel-7-server-rpms install unzip shadow-utils  --nodoc
 # Install AppDynamics Cluster Agent
 ENV CLUSTER_AGENT_HOME /opt/appdynamics/cluster-agent/
 ADD cluster-agent.zip /tmp/cluster-agent.zip
+ADD LICENSE /licenses/
 
 # Create a group and user
 RUN groupadd appdynamics && \
