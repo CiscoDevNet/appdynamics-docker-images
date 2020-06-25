@@ -6,6 +6,11 @@ replaceText () {
 	sed -i "s|$1|$2|g" $3
 }
 
+if [ "${APPDYNAMICS_AGENT_GLOBAL_ACCOUNT_NAME}" == "x" ] || [ "${EVENT_ENDPOINT}" == "x" ]; then
+	echo "Missing at least one of the required parameters (EVENT_ENDPOINT, APPDYNAMICS_AGENT_GLOBAL_ACCOUNT_NAME). The Analytics Agent will be disabled"
+    exit 0
+fi
+
 sed -i 's/false/true/g' $ANALYTICS_AGENT_CONFIG
 
 PROTOCOL="http"
