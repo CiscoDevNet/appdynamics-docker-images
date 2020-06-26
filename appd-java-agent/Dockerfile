@@ -1,18 +1,8 @@
 FROM alpine AS builder
 
-MAINTAINER support@appdynamics.com
-
-LABEL name="AppDynamics Java Agent" \
-      vendor="AppDynamics" \
-      version="4.5.19" \
-      release="1" \
-      url="https://www.appdynamics.com" \
-      summary="AppDynamics solution for monitoring Java applications" \
-      description="AppDynamics agent for monitoring Java applications"
-
-
 ARG APPD_AGENT_VERSION 
 ARG APPD_AGENT_SHA256
+
 
 RUN apk --no-cache add unzip
 
@@ -28,8 +18,22 @@ RUN if [ "x${APPD_AGENT_SHA256}" != "x" ]; then \
 
 ADD LICENSE /licenses/
 
-FROM openjdk:8-jre-alpine
-RUN apk update && apk upgrade
+FROM alpine
+
+ARG APPD_AGENT_VERSION 
+
+MAINTAINER support@appdynamics.com
+
+LABEL name="AppDynamics Java Agent" \
+      vendor="AppDynamics" \
+      version="${APPD_AGENT_VERSION}" \
+      release="1" \
+      url="https://www.appdynamics.com" \
+      summary="AppDynamics solution for monitoring Java applications" \
+      description="AppDynamics agent for monitoring Java applications"
+
 
 COPY --from=builder /tmp /opt/appdynamics
 COPY --from=builder /licenses /opt/appdynamics/licenses
+
+CMD [ "echo", "I am just a messenger delivering the Java Agent." ]
