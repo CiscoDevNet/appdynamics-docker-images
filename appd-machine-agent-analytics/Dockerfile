@@ -1,18 +1,9 @@
 
 FROM openjdk:8-jre-slim AS builder
 
-MAINTAINER support@appdynamics.com
-
-LABEL name="AppDynamics MachineAgent" \
-      vendor="AppDynamics" \
-      version="20.3.2" \
-      release="1" \
-      url="https://www.appdynamics.com" \
-      summary="AppDynamics solution for monitoring infrastructure" \
-      description="The MachineAgent monitors resource utilization, server load and process on the host."
-
-ARG APPD_AGENT_VERSION 
 ARG APPD_AGENT_SHA256
+ARG APPD_AGENT_VERSION 
+
 
 RUN apt-get update -y; \
  apt-get install -y unzip
@@ -30,8 +21,22 @@ RUN if [ "x${APPD_AGENT_SHA256}" != "x" ]; then \
 ADD LICENSE /licenses/
 
 FROM openjdk:8-jre-slim
+
+ARG APPD_AGENT_VERSION 
+
+MAINTAINER support@appdynamics.com
+
+LABEL name="AppDynamics MachineAgent" \
+      vendor="AppDynamics" \
+      version="${APPD_AGENT_VERSION}" \
+      release="1" \
+      url="https://www.appdynamics.com" \
+      summary="AppDynamics solution for monitoring infrastructure" \
+      description="The MachineAgent monitors resource utilization, server load and processes on the host."
+
+
 RUN apt-get update -y; \
- apt-get install -y --no-install-recommends iproute2 procps sysstat dumb-init bash coreutils sed; \
+ apt-get install -y --no-install-recommends iproute2 procps dumb-init coreutils sed; \
 	rm -rf /var/lib/apt/lists/*
 
 COPY --from=builder /tmp /opt/appdynamics
