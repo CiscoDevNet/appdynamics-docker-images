@@ -4,7 +4,7 @@ MAINTAINER AppDynamics
 
 LABEL name="AppDynamics ClusterAgent" \
       vendor="AppDynamics" \
-      version="20.5.0" \
+      version="20.6.0" \
       release="1" \
       url="https://www.appdynamics.com" \
       summary="AppDynamics monitoring solution for applications deployed to Kubernetes clusters" \
@@ -21,8 +21,8 @@ ADD cluster-agent.zip /tmp/cluster-agent.zip
 ADD LICENSE /licenses/
 
 # Create a group and user
-RUN groupadd appdynamics && \
-    useradd appdynamics -g appdynamics && \
+RUN groupadd -g 1001 appdynamics && \
+    useradd appdynamics -g appdynamics -u 1001 && \
     mkdir -p ${CLUSTER_AGENT_HOME} && \
     unzip -oq /tmp/cluster-agent.zip -d ${CLUSTER_AGENT_HOME} && \
     rm /tmp/cluster-agent.zip && \
@@ -43,7 +43,7 @@ RUN mkdir -p ${CLUSTER_AGENT_HOME}/logs && chmod 774 ${CLUSTER_AGENT_HOME}/logs 
 
 RUN chgrp -R 0 /opt/appdynamics && chmod -R g+w /opt/appdynamics
 
-USER appdynamics
+USER 1001
 
 # Changing directory to CLUSTER_AGENT_HOME
 WORKDIR ${CLUSTER_AGENT_HOME}
