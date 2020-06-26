@@ -10,8 +10,8 @@ ENV CLUSTER_AGENT_HOME /opt/appdynamics/cluster-agent/
 ADD cluster-agent.zip /tmp/cluster-agent.zip
 
 # Create a group and user
-RUN addgroup -S appdynamics && \
-    adduser -S -s /bin/sh -G appdynamics appdynamics && \
+RUN addgroup -S -g 1001 appdynamics && \
+    adduser -S -s /bin/sh -G appdynamics -u 1001 appdynamics && \
     mkdir -p ${CLUSTER_AGENT_HOME} && \
     unzip -oq /tmp/cluster-agent.zip -d ${CLUSTER_AGENT_HOME} && \
     rm /tmp/cluster-agent.zip && \
@@ -30,7 +30,7 @@ RUN mkdir -p ${CLUSTER_AGENT_HOME}/logs && chmod 774 ${CLUSTER_AGENT_HOME}/logs 
     chmod 744 ${CLUSTER_AGENT_HOME}/start-appdynamics && \
     chown -R appdynamics:appdynamics /opt/appdynamics
 
-USER appdynamics
+USER 1001
 
 # Changing directory to CLUSTER_AGENT_HOME
 WORKDIR ${CLUSTER_AGENT_HOME}
