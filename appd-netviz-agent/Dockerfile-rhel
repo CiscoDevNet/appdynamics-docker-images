@@ -1,17 +1,19 @@
-
 FROM registry.access.redhat.com/rhel7-minimal
 
 MAINTAINER AppDynamics
 
+ARG APPD_AGENT_VERSION
+
 LABEL name="AppDynamics Network Agent" \
       vendor="AppDynamics" \
-      version="4.5.11" \
+      version="${APPD_AGENT_VERSION}" \
       release="1" \
       url="https://www.appdynamics.com" \
-      summary="AppDynamics solution for monitoring infrastructure" \
+      summary="AppDynamics solution for network monitoring" \
       description="The Network Agent monitors communications between applications across multiple hosts from the network point of view."
- 
-RUN microdnf --enablerepo=rhel-7-server-rpms install unzip shadow-utils iproute net-tools tcpdump sysvinit-tools curl openssh-clients --nodocs && \
+
+RUN microdnf --enablerepo=rhel-7-server-rpms update -y && rm -rf /var/cache/yum 
+RUN microdnf --enablerepo=rhel-7-server-rpms install sed shadow-utils iproute net-tools tcpdump sysvinit-tools curl openssh-clients --nodocs && \
 microdnf clean all
 
 
@@ -21,15 +23,18 @@ ADD LICENSE /licenses/
 
 WORKDIR /opt/appdynamics/netviz
  
-ARG NETVIZ_ZIP_PKG
- 
+ENV NETVIZ_HOME /opt/appdynamics
+
 # copy NetViz agent contents
-ADD ${NETVIZ_ZIP_PKG} .
+COPY appd-netviz-${APPD_AGENT_VERSION}/ .
  
 # run the agent install script
-RUN unzip *.zip && ./install.sh \
-    && sed -i -e "s|enable_netlib = 1|enable_netlib = 0|g" ./conf/agent_config.lua \
-    && sed -i -e "s|WEBSERVICE_IP=.*|WEBSERVICE_IP=\"0.0.0.0\"|g" ./conf/agent_config.lua
+#RUN unzip *.zip && 
+RUN ./install.sh \
+  && sed -i -e "s|enable_netlib = 1|enable_netlib = 0|g" ./conf/agent_config.lua \
+  && sed -i -e "s|WEBSERVICE_IP=.*|WEBSERVICE_IP=\"0.0.0.0\"|g" ./conf/agent_config.lua
+
+
  
 # default command to run for the agent
 CMD  ./bin/appd-netagent -c ./conf -l ./logs -r ./run
