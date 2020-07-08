@@ -16,7 +16,7 @@ RUN if [ "x${APPD_AGENT_SHA256}" != "x" ]; then \
      unzip -oq AppServerAgent-${APPD_AGENT_VERSION}.zip -d /tmp; \
    fi
 
-ADD LICENSE /licenses/
+ADD LICENSE /tmp
 
 FROM alpine
 
@@ -34,6 +34,5 @@ LABEL name="AppDynamics Java Agent" \
 
 
 COPY --from=builder /tmp /opt/appdynamics
-COPY --from=builder /licenses /opt/appdynamics/licenses
 
-CMD [ "echo", "I am just a messenger delivering the Java Agent." ]
+CMD [ "echo", "Delivering the Java Agent. Copy the contents of /opt/appdynamics to the application container" ]
