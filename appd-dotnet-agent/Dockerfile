@@ -1,15 +1,5 @@
 FROM alpine AS builder
 
-MAINTAINER support@appdynamics.com
-
-LABEL name="AppDynamics Agent for .Net Core on Linux" \
-      vendor="AppDynamics" \
-      version="4.5.19" \
-      release="1" \
-      url="https://www.appdynamics.com" \
-      summary="AppDynamics solution for monitoring applications in .Net Core on Linux" \
-      description="This agent monitors applications developed in.Net Core on Linux"
-
 ARG APPD_AGENT_VERSION 
 ARG APPD_AGENT_SHA256
 
@@ -28,6 +18,20 @@ RUN if [ "x${APPD_AGENT_SHA256}" != "x" ]; then \
    fi
 
 FROM alpine 
+
+ARG APPD_AGENT_VERSION 
+
+MAINTAINER support@appdynamics.com
+
+LABEL name="AppDynamics Agent for .Net Core on Linux" \
+      vendor="AppDynamics" \
+      version="${APPD_AGENT_VERSION}" \
+      release="1" \
+      url="https://www.appdynamics.com" \
+      summary="AppDynamics solution for monitoring applications in .Net Core on Linux" \
+      description="This agent monitors applications developed in.Net Core on Linux"
+
+
 RUN apk update && apk upgrade && rm -f /var/cache/apk/*
 
 COPY --from=builder /tmp /opt/appdynamics
