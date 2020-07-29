@@ -13,7 +13,7 @@ LABEL name="AppDynamics Network Agent" \
       description="The Network Agent monitors communications between applications across multiple hosts from the network point of view."
 
 RUN microdnf --enablerepo=rhel-7-server-rpms update -y && rm -rf /var/cache/yum 
-RUN microdnf --enablerepo=rhel-7-server-rpms install sed shadow-utils iproute net-tools tcpdump sysvinit-tools curl openssh-clients --nodocs && \
+RUN microdnf --enablerepo=rhel-7-server-rpms install sed unzip shadow-utils iproute net-tools tcpdump sysvinit-tools curl openssh-clients --nodocs && \
 microdnf clean all
 
 
@@ -23,18 +23,26 @@ ADD LICENSE /licenses/
 
 WORKDIR /opt/appdynamics/netviz
  
-ENV NETVIZ_HOME /opt/appdynamics
+ENV NETVIZ_HOME /opt/appdynamics/netviz
+
+WORKDIR ${NETVIZ_HOME}
 
 # copy NetViz agent contents
 COPY appd-netviz-${APPD_AGENT_VERSION}/ .
  
 # run the agent install script
-#RUN unzip *.zip && 
 RUN ./install.sh \
-  && sed -i -e "s|enable_netlib = 1|enable_netlib = 0|g" ./conf/agent_config.lua \
-  && sed -i -e "s|WEBSERVICE_IP=.*|WEBSERVICE_IP=\"0.0.0.0\"|g" ./conf/agent_config.lua
+    && sed -i -e "s|enable_netlib = 1|enable_netlib = 0|g" ./conf/agent_config.lua \
+    && sed -i -e "s|WEBSERVICE_IP=.*|WEBSERVICE_IP=\"0.0.0.0\"|g" ./conf/agent_config.lua
+
+RUN groupadd appdynamics && \
+    useradd appdynamics -g appdynamics 
 
 
+RUN chown -R appdynamics:appdynamics ${NETVIZ_HOME}
+
+RUN setcap cap_net_raw=eip ${NETVIZ_HOME}/bin/appd-netagent
+
+USER appdynamics
  
-# default command to run for the agent
 CMD  ./bin/appd-netagent -c ./conf -l ./logs -r ./run
