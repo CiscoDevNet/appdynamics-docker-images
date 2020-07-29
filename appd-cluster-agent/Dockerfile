@@ -2,6 +2,16 @@
 # binary is dependent on the os and architecture on which it was built.
 FROM alpine:3.11.6
 
+MAINTAINER AppDynamics
+
+LABEL name="AppDynamics Cluster Agent" \
+      vendor="AppDynamics" \
+      version="20.7.0" \
+      release="1" \
+      url="https://www.appdynamics.com" \
+      summary="AppDynamics monitoring solution for applications deployed to Kubernetes clusters" \
+      description="The ClusterAgent monitors state of Kubernetes or openshift resources and derives metrics to provide visibility into common application impacting issues."
+
 # Install required packages
 RUN apk --update add --no-cache unzip ca-certificates && update-ca-certificates
 
@@ -35,8 +45,8 @@ USER 1001
 # Changing directory to CLUSTER_AGENT_HOME
 WORKDIR ${CLUSTER_AGENT_HOME}
 
-# Decided to make this an ENTRYPOINT instead of CMD because the cluster agent should be executed once docker run is
-# invoked.
+# Decided system shell an ENTRYPOINT because to run command to debug the container whenever required
+# execute the start-appdynamics.sh script in the shell and start the cluster agent
 ENTRYPOINT ["/bin/sh"]
 CMD ["-c", "./start-appdynamics"]
 
