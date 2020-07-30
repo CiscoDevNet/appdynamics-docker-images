@@ -13,7 +13,7 @@ LABEL name="AppDynamics Network Agent" \
       description="The Network Agent monitors communications between applications across multiple hosts from the network point of view."
 
 RUN microdnf --enablerepo=rhel-7-server-rpms update -y && rm -rf /var/cache/yum 
-RUN microdnf --enablerepo=rhel-7-server-rpms install sed unzip shadow-utils iproute net-tools tcpdump sysvinit-tools curl openssh-clients --nodocs && \
+RUN microdnf --enablerepo=rhel-7-server-rpms install sed shadow-utils iproute net-tools tcpdump sysvinit-tools curl openssh-clients --nodocs && \
 microdnf clean all
 
 
