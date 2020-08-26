@@ -1,12 +1,13 @@
 # Make sure that the cluster agent image has the same environment on which it was built on because the
 # binary is dependent on the os and architecture on which it was built.
-FROM alpine:3.11.6
+ARG version=latest
+FROM alpine:$version
 
 MAINTAINER AppDynamics
 
 LABEL name="AppDynamics Cluster Agent" \
       vendor="AppDynamics" \
-      version="20.7.0" \
+      version="20.8.0" \
       release="1" \
       url="https://www.appdynamics.com" \
       summary="AppDynamics monitoring solution for applications deployed to Kubernetes clusters" \
@@ -17,7 +18,8 @@ RUN apk --update add --no-cache unzip ca-certificates && update-ca-certificates
 
 # Install AppDynamics Cluster Agent
 ENV CLUSTER_AGENT_HOME /opt/appdynamics/cluster-agent/
-ADD cluster-agent.zip /tmp/cluster-agent.zip
+COPY cluster-agent.zip /tmp/cluster-agent.zip
+COPY LICENSE /licenses/
 
 # Create a group and user
 RUN addgroup -S -g 1001 appdynamics && \
@@ -35,7 +37,7 @@ RUN addgroup -S -g 1001 appdynamics && \
     ln -s /opt/appdynamics/cluster-agent/config/instrumentation/instrumentation.yml /opt/appdynamics/cluster-agent/config/instrumentation.yml
 
 # Include start script to configure and start Cluster Agent at runtime
-ADD start-appdynamics ${CLUSTER_AGENT_HOME}
+COPY start-appdynamics ${CLUSTER_AGENT_HOME}
 RUN mkdir -p ${CLUSTER_AGENT_HOME}/logs && chmod 774 ${CLUSTER_AGENT_HOME}/logs && \
     chmod 744 ${CLUSTER_AGENT_HOME}/start-appdynamics && \
     chown -R appdynamics:appdynamics /opt/appdynamics

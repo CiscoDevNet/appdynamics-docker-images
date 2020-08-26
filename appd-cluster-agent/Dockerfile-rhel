@@ -4,7 +4,7 @@ MAINTAINER AppDynamics
 
 LABEL name="AppDynamics Cluster Agent" \
       vendor="AppDynamics" \
-      version="20.7.0" \
+      version="20.8.0" \
       release="1" \
       url="https://www.appdynamics.com" \
       summary="AppDynamics monitoring solution for applications deployed to Kubernetes clusters" \
@@ -17,8 +17,8 @@ RUN microdnf --enablerepo=rhel-7-server-rpms install unzip shadow-utils  --nodoc
 
 # Install AppDynamics Cluster Agent
 ENV CLUSTER_AGENT_HOME /opt/appdynamics/cluster-agent/
-ADD cluster-agent.zip /tmp/cluster-agent.zip
-ADD LICENSE /licenses/
+COPY cluster-agent.zip /tmp/cluster-agent.zip
+COPY LICENSE /licenses/
 
 # Create a group and user
 RUN groupadd -g 1001 appdynamics && \
@@ -36,7 +36,7 @@ RUN groupadd -g 1001 appdynamics && \
     ln -s /opt/appdynamics/cluster-agent/config/instrumentation/instrumentation.yml /opt/appdynamics/cluster-agent/config/instrumentation.yml
 
 # Include start script to configure and start Cluster Agent at runtime
-ADD start-appdynamics ${CLUSTER_AGENT_HOME}
+COPY start-appdynamics ${CLUSTER_AGENT_HOME}
 RUN mkdir -p ${CLUSTER_AGENT_HOME}/logs && chmod 774 ${CLUSTER_AGENT_HOME}/logs && \
     chmod 744 ${CLUSTER_AGENT_HOME}/start-appdynamics && \
     chown -R appdynamics:appdynamics /opt/appdynamics
