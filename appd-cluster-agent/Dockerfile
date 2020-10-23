@@ -7,7 +7,7 @@ MAINTAINER AppDynamics
 
 LABEL name="AppDynamics Cluster Agent" \
       vendor="AppDynamics" \
-      version="20.9.1" \
+      version="20.10.0" \
       release="1" \
       url="https://www.appdynamics.com" \
       summary="AppDynamics monitoring solution for applications deployed to Kubernetes clusters" \
@@ -40,7 +40,8 @@ RUN addgroup -S -g 1001 appdynamics && \
 COPY start-appdynamics ${CLUSTER_AGENT_HOME}
 RUN mkdir -p ${CLUSTER_AGENT_HOME}/logs && chmod 774 ${CLUSTER_AGENT_HOME}/logs && \
     chmod 744 ${CLUSTER_AGENT_HOME}/start-appdynamics && \
-    chown -R appdynamics:appdynamics /opt/appdynamics
+    chown -R appdynamics:0 /opt/appdynamics && \
+    chmod -R 774 /opt/appdynamics
 
 USER 1001
 
