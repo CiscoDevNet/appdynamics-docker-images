@@ -1,9 +1,7 @@
 
 FROM openjdk:8-jdk-alpine
 
-MAINTAINER mark.prichard@appdynamics.com
-
-RUN apk add --no-cache bash gawk sed grep bc coreutils
+RUN apk add --no-cache bash gawk sed grep bc coreutils bind-tools
 
 ARG APPD_AGENT_VERSION 
 ARG APPD_AGENT_SHA256
@@ -31,6 +29,8 @@ RUN chmod +x /opt/appdynamics/startup.sh
 
 RUN chgrp -R 0 /opt && \
     chmod -R g=u /opt
+
+USER 1001
 
 EXPOSE 9090
 

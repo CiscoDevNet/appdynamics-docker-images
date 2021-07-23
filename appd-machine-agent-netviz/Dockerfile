@@ -1,8 +1,6 @@
 
 FROM openjdk:8-jre-slim AS builder
 
-MAINTAINER mark.prichard@appdynamics.com
-
 ARG APPD_AGENT_VERSION 
 ARG APPD_AGENT_SHA256
 
@@ -19,7 +17,12 @@ RUN if [ "x${APPD_AGENT_SHA256}" != "x" ]; then \
 
 FROM openjdk:8-jre-slim
 
-RUN apt-get update && apt-get -y upgrade && apt-get install -y unzip bash gawk sed grep bc coreutils && apt-get install -y apt-utils && apt-get install -y iproute2 && apt-get install -y procps && apt-get install -y sysstat && apt-get install -y net-tools tcpdump curl sysvinit-utils openssh-client && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get -y upgrade && \
+apt-get install -y unzip bash gawk sed grep bc coreutils && \
+apt-get install -y apt-utils iproute2 && \
+apt-get install -y procps sysstat dnsutils && \
+apt-get install -y net-tools tcpdump curl sysvinit-utils openssh-client && \
+rm -rf /var/lib/apt/lists/*
 
 RUN apt-get clean autoclean
 RUN apt-get autoremove --yes

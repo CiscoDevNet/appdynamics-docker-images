@@ -3,8 +3,6 @@ FROM centos:centos7
 
 ARG APPD_AGENT_VERSION
 
-MAINTAINER AppDynamics
-
 LABEL name="AppDynamics Network Agent" \
       vendor="AppDynamics" \
       version="${APPD_AGENT_VERSION}" \
@@ -19,6 +17,7 @@ RUN yum update -y && yum install -y \
   net-tools \
   tcpdump \
   curl  \
+  bind-utils \
   unzip   \
   sysvinit-tools \
   openssh-clients && rm -rf /var/cache/yum && yum clean all

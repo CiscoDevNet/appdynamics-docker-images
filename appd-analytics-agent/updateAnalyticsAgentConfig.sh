@@ -1,9 +1,12 @@
 ANALYTICS_AGENT_PROPERTIES="${1}/conf/analytics-agent.properties"
+ANALYTICS_AGENT_CONFIG="${1}/monitor.xml"
 
 replaceText () {
 
 	sed -i "s|$1|$2|g" $3
 }
+
+sed -i 's/false/true/g' $ANALYTICS_AGENT_CONFIG
 
 PROTOCOL="http"
 
