@@ -1,4 +1,3 @@
-
 FROM openjdk:8-jre-slim AS builder
 
 ARG APPD_AGENT_SHA256
@@ -34,10 +33,15 @@ LABEL name="AppDynamics MachineAgent" \
       summary="AppDynamics solution for monitoring infrastructure" \
       description="The MachineAgent monitors resource utilization, server load and processes on the host."
 
+FROM openjdk:8-jre-slim 
+RUN apt-get update && apt-get -y upgrade && \
+apt-get install -y unzip bash gawk sed grep bc coreutils dumb-init && \
+apt-get install -y apt-utils iproute2 && \
+apt-get install -y procps sysstat dnsutils
 
-RUN apt-get update -y; \
- apt-get install -y --no-install-recommends iproute2 procps dumb-init coreutils sed; \
-	rm -rf /var/lib/apt/lists/*
+RUN apt-get clean autoclean
+RUN apt-get autoremove --yes
+RUN rm -rf /var/lib/{apt,dpkg,cache,log}/
 
 COPY --from=builder /tmp /opt/appdynamics
 COPY --from=builder /licenses /licenses
