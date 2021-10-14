@@ -52,7 +52,7 @@ if ($APPDYNAMICS_ENABLE_ANALYTICS_AGENT -eq "true") {
    }
 }
 
-Start-Sleep -s 2 #coz the disk io sucks 
+Start-Sleep -s 2 # disk io  
 
 # MA JV section begins here 
 
