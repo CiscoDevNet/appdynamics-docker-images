@@ -1,4 +1,4 @@
-FROM openjdk:8-jre-slim AS builder
+FROM openjdk:11-jre-slim AS builder
 
 ARG APPD_AGENT_VERSION
 ARG APPD_AGENT_SHA256
@@ -16,7 +16,7 @@ RUN if [ "x${APPD_AGENT_SHA256}" != "x" ]; then \
      unzip -oq MachineAgent-${APPD_AGENT_VERSION}.zip -d /tmp; \
     fi
 
-FROM openjdk:8-jre-slim
+FROM openjdk:11-jre-slim
 
 ARG APPD_AGENT_VERSION
 
@@ -28,15 +28,24 @@ LABEL name="AppDynamics MachineAgent" \
       summary="AppDynamics solution for monitoring infrastructure" \
       description="The MachineAgent monitors resource utilization, server load and processes on the host."
 
-FROM openjdk:8-jre-slim 
-RUN apt-get update && apt-get -y upgrade && \
-apt-get install -y unzip bash gawk sed grep bc coreutils dumb-init && \
-apt-get install -y apt-utils iproute2 && \
-apt-get install -y procps sysstat dnsutils
+FROM openjdk:11-jre-slim 
 
-RUN apt-get clean autoclean
-RUN apt-get autoremove --yes
-RUN rm -rf /var/lib/{apt,dpkg,cache,log}/
+RUN apt-get update && apt-get -y upgrade && \
+apt-get install -y \
+apt-utils \
+bash \
+bc \
+coreutils \
+dnsutils \
+dumb-init \
+gawk \
+grep \
+iproute2 \
+procps \
+sed \
+sysstat \
+unzip \
+&& rm -rf /var/lib/{apt,dpkg,cache,log}/
 
 COPY --from=builder /tmp /opt/appdynamics
 
