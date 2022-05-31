@@ -36,6 +36,7 @@ RUN apk update \
     sysstat \
     unzip \
     openjdk11-jre \
+    eudev \
     && rm -rf /var/cache/apk/*
 
 COPY --from=builder /tmp /opt/appdynamics
