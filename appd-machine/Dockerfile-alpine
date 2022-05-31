@@ -33,6 +33,7 @@ RUN apk update \
     sed \
     sysstat \
     unzip \
+    eudev \
     openjdk11-jre \
     && rm -rf /var/cache/apk/*
 
