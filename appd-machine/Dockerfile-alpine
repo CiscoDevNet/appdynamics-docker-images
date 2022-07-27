@@ -19,7 +19,9 @@ RUN if [ "x${APPD_AGENT_SHA256}" != "x" ]; then \
 
 FROM alpine
 
-RUN apk update \
+RUN addgroup -g 1001 appdynamics && \
+    adduser appdynamics --ingroup appdynamics --uid 1001 --disabled-password && \
+    apk update \
     && apk upgrade \
     && apk add bash \
     bc \
@@ -48,6 +50,10 @@ LABEL name="AppDynamics MachineAgent" \
       description="The MachineAgent monitors resource utilization, server load and processes on the host."
 
 COPY --from=builder /tmp /opt/appdynamics
+RUN chown -R appdynamics:0 /opt/appdynamics && \
+chmod -R 774 /opt/appdynamics
+
+USER 1001
 
 ENTRYPOINT ["/usr/bin/dumb-init"]
 CMD ["sh", "-c", "java ${MACHINE_AGENT_PROPERTIES} -jar /opt/appdynamics/machineagent.jar"]

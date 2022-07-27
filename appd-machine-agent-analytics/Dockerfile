@@ -34,7 +34,9 @@ LABEL name="AppDynamics MachineAgent" \
       description="The MachineAgent monitors resource utilization, server load and processes on the host."
 
 FROM openjdk:11-jre-slim 
-RUN apt-get update && apt-get -y upgrade && \
+RUN groupadd -g 1001 appdynamics && \
+useradd appdynamics -g appdynamics -u 1001 && \
+apt-get update && apt-get -y upgrade && \
 apt-get install -y \
 apt-utils \
 bash \
@@ -54,6 +56,9 @@ unzip \
 COPY --from=builder /tmp /opt/appdynamics
 COPY --from=builder /licenses /licenses
 
+RUN chown -R appdynamics:0 /opt/appdynamics && \
+chmod -R 774 /opt/appdynamics
+
 ENV MACHINE_AGENT_HOME /opt/appdynamics
 
 WORKDIR ${MACHINE_AGENT_HOME}
@@ -64,6 +69,7 @@ RUN chmod +x ./updateAnalyticsAgent.sh
 COPY startup.sh ./startup.sh
 RUN chmod +x ./startup.sh
 
+USER 1001
 
 EXPOSE 9090
 

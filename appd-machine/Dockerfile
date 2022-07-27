@@ -30,7 +30,9 @@ LABEL name="AppDynamics MachineAgent" \
 
 FROM openjdk:11-jre-slim 
 
-RUN apt-get update && apt-get -y upgrade && \
+RUN groupadd -g 1001 appdynamics && \
+useradd appdynamics -g appdynamics -u 1001 && \
+apt-get update && apt-get -y upgrade && \
 apt-get install -y \
 apt-utils \
 bash \
@@ -48,6 +50,10 @@ unzip \
 && rm -rf /var/lib/{apt,dpkg,cache,log}/
 
 COPY --from=builder /tmp /opt/appdynamics
+RUN chown -R appdynamics:0 /opt/appdynamics && \
+chmod -R 774 /opt/appdynamics
+
+USER 1001
 
 ENTRYPOINT ["/usr/bin/dumb-init"]
 CMD ["sh", "-c", "java ${MACHINE_AGENT_PROPERTIES} -jar /opt/appdynamics/machineagent.jar"]
