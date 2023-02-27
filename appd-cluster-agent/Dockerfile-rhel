@@ -1,19 +1,17 @@
-FROM registry.access.redhat.com/rhel7-minimal
+FROM registry.access.redhat.com/ubi8/ubi-minimal
 
 MAINTAINER AppDynamics
 
 LABEL name="AppDynamics Cluster Agent" \
       vendor="AppDynamics" \
-      version="22.12.1" \
+      version="23.2.0" \
       release="1" \
       url="https://www.appdynamics.com" \
       summary="AppDynamics monitoring solution for applications deployed to Kubernetes clusters" \
       description="The ClusterAgent monitors state of Kubernetes or openshift resources and derives metrics to provide visibility into common application impacting issues."
 
-
 # Install required packages
-RUN microdnf --enablerepo=rhel-7-server-rpms install unzip shadow-utils  --nodocs && \
- microdnf clean all
+RUN microdnf install unzip shadow-utils --nodocs && microdnf clean all
 
 # Install AppDynamics Cluster Agent
 ENV CLUSTER_AGENT_HOME /opt/appdynamics/cluster-agent/
@@ -37,8 +35,8 @@ RUN groupadd -g 1001 appdynamics && \
 
 # Include start script to configure and start Cluster Agent at runtime
 COPY start-appdynamics ${CLUSTER_AGENT_HOME}
-RUN mkdir -p ${CLUSTER_AGENT_HOME}/logs && chmod 774 ${CLUSTER_AGENT_HOME}/logs && \
-    chmod 744 ${CLUSTER_AGENT_HOME}/start-appdynamics && \
+RUN mkdir -p /opt/appdynamics/cluster-agent/logs && chmod 774 /opt/appdynamics/cluster-agent/logs && \
+    chmod 744 /opt/appdynamics/cluster-agent/start-appdynamics && \
     chown -R appdynamics:0 /opt/appdynamics && \
     chmod -R 774 /opt/appdynamics
 
