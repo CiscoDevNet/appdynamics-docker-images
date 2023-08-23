@@ -1,3 +1,8 @@
+## ⚠️ Deprecation and Archive Notice
+This is a notice for sunsetting the public facing repository containing AppDynamics dockerfiles in github. 
+
+Effective from August 23, 2023, This repository on GitHub will be deprecated (moved to archive). On October 31st 2023, this repository will be sunset. Latest docker files will be made available via the Appdynamics download portal for customers who would like to continue to build their own docker images.
+
 ### Building Cluster Agent Image
 
 To build the cluster agent Image to deploy it on K8s or Openshift. Please follow the below steps:
