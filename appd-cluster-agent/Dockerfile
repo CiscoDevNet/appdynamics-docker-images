@@ -7,14 +7,15 @@ MAINTAINER AppDynamics
 
 LABEL name="AppDynamics Cluster Agent" \
       vendor="AppDynamics" \
-      version="23.7.0" \
+      version="23.8.0" \
       release="1" \
       url="https://www.appdynamics.com" \
       summary="AppDynamics monitoring solution for applications deployed to Kubernetes clusters" \
       description="The ClusterAgent monitors state of Kubernetes or openshift resources and derives metrics to provide visibility into common application impacting issues."
 
 # Install required packages
-RUN apk --update add --no-cache unzip ca-certificates && update-ca-certificates
+RUN apk --update add --no-cache unzip ca-certificates && update-ca-certificates && \
+    apk upgrade --no-cache
 
 # Install AppDynamics Cluster Agent
 ENV CLUSTER_AGENT_HOME /opt/appdynamics/cluster-agent/
