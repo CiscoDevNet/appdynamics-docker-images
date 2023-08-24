@@ -1,5 +1,5 @@
 ## ⚠️ Deprecation Notice
-This is a notice for sunsetting this public facing repository containing Cisco-AppDynamics dockerfiles in Github.
+This is a notice for sunsetting this public facing repository containing AppDynamics dockerfiles in Github.
 
 The docker files in this repository will be maintained till October 31st 2023, post which it will not be updated. After this date, the latest docker files will continue to be made available via the [AppDynamics download portal](https://download.appdynamics.com/) for customers who would like to continue to build their own docker images.
 
