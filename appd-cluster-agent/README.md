@@ -1,7 +1,7 @@
-## ⚠️ Deprecation and Archive Notice
-This is a notice for sunsetting the public facing repository containing AppDynamics dockerfiles in github. 
+## ⚠️ Deprecation Notice
+This is a notice for sunsetting this public facing repository containing Cisco-AppDynamics dockerfiles in Github.
 
-Effective from August 23, 2023, This repository on GitHub will be deprecated (moved to archive). On October 31st 2023, this repository will be sunset. Latest docker files will be made available via the Appdynamics download portal for customers who would like to continue to build their own docker images.
+The docker files in this repository will be maintained till October 31st 2023, post which it will not be updated. After this date, the latest docker files will continue to be made available via the Cisco-AppDynamics download portal for customers who would like to continue to build their own docker images.
 
 ### Building Cluster Agent Image
 
