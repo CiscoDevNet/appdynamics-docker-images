@@ -30,5 +30,5 @@ fi
 
 
 
-# Start Machine Agent
+# Start DB Agent
 java ${DB_PROPERTIES} -jar ${DB_AGENT_HOME}/db-agent.jar
